@@ -15,8 +15,10 @@
   },
   "dependencies": {
     "gatsby": "^2.24.15",
+    "milligram": "^1.4.1",
     "react": "^16.13.1",
-    "react-dom": "^16.13.1"
+    "react-dom": "^16.13.1",
+    "react-table": "^7.3.3"
   },
   "devDependencies": {
     "prettier": "2.0.5"
