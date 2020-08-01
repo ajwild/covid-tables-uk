@@ -22,7 +22,11 @@ const getCoronavirusData = async (areaType, nextUrl, data = []) => {
   const mergedData = [...data, ...response.data];
 
   return response.pagination.next
-    ? getCoronavirusData(areaType, response.pagination.next, mergedData)
+    ? getCoronavirusData(
+        areaType,
+        `${CORONAVIRUS_API_URL}${response.pagination.next}`,
+        mergedData
+      )
     : mergedData;
 };
 
