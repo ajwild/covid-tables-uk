@@ -1,10 +1,24 @@
-import React, { useMemo } from 'react';
 import { Link, graphql, useStaticQuery } from 'gatsby';
+import PropTypes from 'prop-types';
+import React, { useMemo } from 'react';
 
 import Table from '../components/table';
 
 // eslint-disable-next-line import/no-unassigned-import
 import 'milligram/dist/milligram.min.css';
+
+const NameCell = ({ row, value }) => (
+  <Link to={row.original.slug}>{value}</Link>
+);
+
+NameCell.propTypes = {
+  row: PropTypes.shape({
+    original: PropTypes.shape({
+      slug: PropTypes.string.isRequired,
+    }),
+  }),
+  value: PropTypes.string.isRequired,
+};
 
 const Home = () => {
   const { allLocation } = useStaticQuery(graphql`
@@ -34,7 +48,7 @@ const Home = () => {
       {
         Header: 'Name',
         accessor: 'areaName',
-        Cell: ({ row, value }) => <Link to={row.original.slug}>{value}</Link>,
+        Cell: NameCell,
       },
       {
         Header: 'Type',
