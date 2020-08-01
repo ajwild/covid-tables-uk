@@ -11,7 +11,8 @@
     "start": "npm run develop",
     "serve": "gatsby serve",
     "clean": "gatsby clean",
-    "test": "echo \"Write tests! -> https://gatsby.dev/unit-testing\" && exit 1"
+    "test": "npm run test:lint",
+    "test:lint": "xo"
   },
   "dependencies": {
     "gatsby": "^2.24.15",
@@ -21,7 +22,10 @@
     "react-table": "^7.3.3"
   },
   "devDependencies": {
-    "prettier": "2.0.5"
+    "eslint-config-xo-react": "^0.23.0",
+    "eslint-plugin-react": "^7.20.5",
+    "eslint-plugin-react-hooks": "^4.0.8",
+    "xo": "^0.32.1"
   },
   "repository": {
     "type": "git",
@@ -29,5 +33,23 @@
   },
   "bugs": {
     "url": "https://github.com/gatsbyjs/gatsby/issues"
+  },
+  "xo": {
+    "prettier": true,
+    "space": true,
+    "envs": [
+      "browser",
+      "node"
+    ],
+    "extends": [
+      "xo-react"
+    ],
+    "rules": {
+      "unicorn/no-reduce": 0
+    }
+  },
+  "prettier": {
+    "bracketSpacing": true,
+    "trailingComma": "es5"
   }
 }
