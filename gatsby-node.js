@@ -1,12 +1,12 @@
 const { paramCase } = require('change-case');
 const path = require('path');
 
-const { AREA_TYPES } = require('./src/constants');
+const { AREA_TYPES, MAX_CACHE_AGE } = require('./src/constants');
 const { getCoronavirusData } = require('./src/sources/coronavirus');
 const { getLocations } = require('./src/sources/locations');
 const { getPopulations } = require('./src/sources/populations');
 
-exports.createPages = async ({ graphql, actions }) => {
+exports.createPages = async ({ actions, graphql }) => {
   const { createPage } = actions;
 
   // Load all locations
@@ -35,20 +35,59 @@ exports.createPages = async ({ graphql, actions }) => {
   });
 };
 
+const tryCacheWithFallback = async (
+  [cache, cacheKey, reporter],
+  fallbackFn,
+  fallbackArgs = []
+) => {
+  const args = JSON.stringify(fallbackArgs);
+  const cacheResponse = await cache.get(cacheKey);
+
+  if (
+    cacheResponse &&
+    Date.now() - cacheResponse.created <= MAX_CACHE_AGE &&
+    cacheResponse.args === args
+  ) {
+    reporter.info(`Using cached data for "${cacheKey}"`);
+    return cacheResponse.data;
+  }
+
+  const data = await fallbackFn(...fallbackArgs);
+  reporter.info(`Adding "${cacheKey}" data to cache`);
+  // Set cache but don't wait for promise to resolve
+  cache.set(cacheKey, { args, created: Date.now(), data });
+  return data;
+};
+
 exports.sourceNodes = async ({
   actions,
-  createNodeId,
+  cache,
   createContentDigest,
+  createNodeId,
+  reporter,
 }) => {
   const { createNode } = actions;
 
-  // Load all data from APIs
-  const locations = await getLocations(AREA_TYPES);
-  const populations = await getPopulations();
-  const groupedData = await Promise.all(
-    AREA_TYPES.map((areaType) => getCoronavirusData(areaType))
+  // Load all data from cache or APIs
+  const locations = await tryCacheWithFallback(
+    [cache, 'locations', reporter],
+    getLocations,
+    [AREA_TYPES]
   );
-  const coronavirusData = groupedData.flat();
+  const populations = await tryCacheWithFallback(
+    [cache, 'populations', reporter],
+    getPopulations
+  );
+  const coronavirusData = await tryCacheWithFallback(
+    [cache, 'coronavirusData', reporter],
+    async (areaTypes) => {
+      const groupedData = await Promise.all(
+        areaTypes.map((areaType) => getCoronavirusData(areaType))
+      );
+      return groupedData.flat();
+    },
+    [AREA_TYPES]
+  );
 
   // Convert population data array to mapped object
   const populationData = populations.reduce(
@@ -121,7 +160,7 @@ exports.sourceNodes = async ({
     // Add to Gatsby nodes
     const nodeContent = JSON.stringify(location);
     const nodeMeta = {
-      id: createNodeId(location.areaCode),
+      id: createNodeId(areaCode),
       parent: null,
       children: [],
       internal: {
