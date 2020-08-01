@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import React from 'react';
 
 // eslint-disable-next-line import/no-unassigned-import
-import 'milligram/dist/milligram.min.css';
+import 'chota/dist/chota.min.css';
 
 const Layout = ({ children }) => {
   return (
