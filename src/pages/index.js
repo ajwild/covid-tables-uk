@@ -2,10 +2,8 @@ import { Link, graphql, useStaticQuery } from 'gatsby';
 import PropTypes from 'prop-types';
 import React, { useMemo } from 'react';
 
+import Layout from '../components/layout';
 import Table from '../components/table';
-
-// eslint-disable-next-line import/no-unassigned-import
-import 'milligram/dist/milligram.min.css';
 
 const NameCell = ({ row, value }) => (
   <Link to={row.original.slug}>{value}</Link>
@@ -76,15 +74,10 @@ const Home = () => {
   console.log('data', data);
 
   return (
-    <div>
+    <Layout>
       <h1>Home</h1>
       <Table columns={columns} data={data} />
-      {/* {allLocation.edges.map(({ node }) => (
-        <p key={node.areaCode}>
-          <Link to={node.slug}>{node.areaName}</Link>
-        </p>
-      ))} */}
-    </div>
+    </Layout>
   );
 };
 

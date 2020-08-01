@@ -2,11 +2,17 @@ import { graphql } from 'gatsby';
 import PropTypes from 'prop-types';
 import React from 'react';
 
+import Layout from '../components/layout';
+
 const Location = ({ data }) => {
   const location = data.allLocation.edges[0].node;
   console.log('location', location);
 
-  return <div>{location.areaName}</div>;
+  return (
+    <Layout>
+      <h1>{location.areaName}</h1>
+    </Layout>
+  );
 };
 
 Location.propTypes = {
