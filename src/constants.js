@@ -1,4 +1,4 @@
-exports.AREA_TYPES = ['nation', 'region' /* , 'utla', 'ltla' */];
+exports.AREA_TYPES = ['nation', 'region', 'utla' /* , 'ltla' */];
 exports.CORONAVIRUS_API_URL = 'https://api.coronavirus-staging.data.gov.uk';
 exports.CORONAVIRUS_DATA_FIELDS = [
   'areaCode',

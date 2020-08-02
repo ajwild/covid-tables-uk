@@ -1,4 +1,3 @@
-import { capitalCase } from 'change-case';
 import { graphql, useStaticQuery } from 'gatsby';
 import PropTypes from 'prop-types';
 import React, { useMemo, useState } from 'react';
@@ -7,7 +6,10 @@ import NameCell from '../components/cells/name-cell';
 import Layout from '../components/layout';
 import Table from '../components/table';
 import { AREA_TYPES } from '../constants';
-import { getPreviousDaysCasesPer100kPopulation } from '../utils/location';
+import {
+  formatAreaType,
+  getPreviousDaysCasesPer100kPopulation,
+} from '../utils/location';
 
 const Home = ({ path }) => {
   const { allLocation } = useStaticQuery(graphql`
@@ -73,7 +75,8 @@ const Home = ({ path }) => {
       },
       {
         Header: 'Type',
-        accessor: 'areaType',
+        accessor: ({ areaType }) => formatAreaType(areaType),
+        id: 'areaType',
       },
       {
         Header: 'Cases',
@@ -135,7 +138,7 @@ const Home = ({ path }) => {
             href="#"
             onClick={(event) => handleTabClick(event, areaType)}
           >
-            {capitalCase(areaType)}
+            {formatAreaType(areaType)}
           </a>
         ))}
       </nav>

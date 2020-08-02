@@ -1,3 +1,5 @@
+const { capitalCase } = require('change-case');
+
 const getCumulativeCases = (summary) => {
   const { cases: { cumulative: { value = null } = {} } = {} } = summary;
   return value;
@@ -71,3 +73,6 @@ exports.rankLocations = (
   // Fallback to sorting by areaCode
   return areaCodeA > areaCodeB ? 1 : -1;
 };
+
+exports.formatAreaType = (areaType) =>
+  areaType.slice(1) === 'tla' ? areaType.toUpperCase() : capitalCase(areaType);
