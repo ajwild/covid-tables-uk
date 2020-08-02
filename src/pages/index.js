@@ -98,6 +98,10 @@ const Home = ({ path }) => {
     []
   );
 
+  const hiddenColumns = useMemo(() => (areaTypeFilter ? ['areaType'] : []), [
+    areaTypeFilter,
+  ]);
+
   const data = useMemo(
     () =>
       allLocation.edges
@@ -142,7 +146,7 @@ const Home = ({ path }) => {
           </a>
         ))}
       </nav>
-      <Table columns={columns} data={data} />
+      <Table columns={columns} data={data} hiddenColumns={hiddenColumns} />
     </Layout>
   );
 };
