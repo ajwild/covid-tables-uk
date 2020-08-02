@@ -1,10 +1,15 @@
 const { paramCase } = require('change-case');
 const path = require('path');
 
-const { AREA_TYPES, MAX_CACHE_AGE } = require('./src/constants');
+const { AREA_TYPES, CORONAVIRUS_DATA_FIELDS } = require('./src/constants');
 const { getCoronavirusData } = require('./src/sources/coronavirus');
 const { getLocations } = require('./src/sources/locations');
 const { getPopulations } = require('./src/sources/populations');
+const { tryCacheWithFallback } = require('./src/utils/cache');
+const { prepareHistoryData } = require('./src/utils/history');
+const { rankLocations } = require('./src/utils/location');
+const { preparePopulationData } = require('./src/utils/population');
+const { prepareSummaryData } = require('./src/utils/summary');
 
 exports.createPages = async ({ actions, graphql }) => {
   const { createPage } = actions;
@@ -35,30 +40,6 @@ exports.createPages = async ({ actions, graphql }) => {
   });
 };
 
-const tryCacheWithFallback = async (
-  [cache, cacheKey, reporter],
-  fallbackFn,
-  fallbackArgs = []
-) => {
-  const args = JSON.stringify(fallbackArgs);
-  const cacheResponse = await cache.get(cacheKey);
-
-  if (
-    cacheResponse &&
-    Date.now() - cacheResponse.created <= MAX_CACHE_AGE &&
-    cacheResponse.args === args
-  ) {
-    reporter.info(`Using cached data for "${cacheKey}"`);
-    return cacheResponse.data;
-  }
-
-  const data = await fallbackFn(...fallbackArgs);
-  reporter.info(`Adding "${cacheKey}" data to cache`);
-  // Set cache but don't wait for promise to resolve
-  cache.set(cacheKey, { args, created: Date.now(), data });
-  return data;
-};
-
 exports.sourceNodes = async ({
   actions,
   cache,
@@ -80,96 +61,48 @@ exports.sourceNodes = async ({
   );
   const coronavirusData = await tryCacheWithFallback(
     [cache, 'coronavirusData', reporter],
-    async (areaTypes) => {
+    async (areaTypes, dataFields) => {
       const groupedData = await Promise.all(
-        areaTypes.map((areaType) => getCoronavirusData(areaType))
+        areaTypes.map((areaType) => getCoronavirusData(areaType, dataFields))
       );
       return groupedData.flat();
     },
-    [AREA_TYPES]
+    [AREA_TYPES, CORONAVIRUS_DATA_FIELDS]
   );
 
-  // Convert population data array to mapped object
-  const populationData = populations.reduce(
-    (accumulator, { areaCode, population }) => ({
-      ...accumulator,
-      [areaCode]: population,
-    }),
-    {}
-  );
+  // Convert API response arrays into objects
+  const populationData = preparePopulationData(populations);
+  const historyData = prepareHistoryData(coronavirusData);
+  const summaryData = prepareSummaryData(historyData);
 
-  // Group coronavirus data by areaCode in mapped array
-  const historyData = coronavirusData.reduce(
-    (accumulator, data) => ({
-      ...accumulator,
-      [data.areaCode]: [
-        ...(accumulator[data.areaCode] || []),
-        {
-          date: data.date,
-          newCasesBySpecimenDate: data.newCasesBySpecimenDate,
+  locations
+    .sort(rankLocations(summaryData, populationData))
+    .forEach(([areaCode, areaName, areaType], index) => {
+      // Combine calculated data
+      const location = {
+        areaCode,
+        areaName,
+        areaType,
+        slug: `${areaType}/${paramCase(areaName)}`,
+        population: populationData[areaCode],
+        rank: index + 1,
+        history: historyData[areaCode],
+        summary: summaryData[areaCode],
+      };
+
+      // Add to Gatsby nodes
+      const nodeContent = JSON.stringify(location);
+      const nodeMeta = {
+        id: createNodeId(areaCode),
+        parent: null,
+        children: [],
+        internal: {
+          type: `Location`,
+          mediaType: `application/json`,
+          content: nodeContent,
+          contentDigest: createContentDigest(location),
         },
-      ],
-    }),
-    {}
-  );
-
-  // Generate a summary of the history data for each areaCode
-  const summaryData = Object.keys(historyData).reduce(
-    (accumulator, areaCode) => ({
-      ...accumulator,
-      [areaCode]: {
-        top: 1,
-        // Add summary details
-      },
-    }),
-    {}
-  );
-
-  // Sort (rank) locations based on their summary data
-  const rankData = locations
-    .sort(
-      ([a], [b]) =>
-        // Compare last 7 days per 100,000
-        summaryData[a].cumCasesBySpecimenDate -
-          summaryData[b].cumCasesBySpecimenDate ||
-        // Go back to 8, 9, 10 days?
-        summaryData[a].cumCasesBySpecimenDate -
-          summaryData[b].cumCasesBySpecimenDate
-    )
-    .reduce(
-      (accumulator, [areaCode], index) => ({
-        ...accumulator,
-        [areaCode]: index + 1,
-      }),
-      {}
-    );
-
-  locations.forEach(([areaCode, areaName, areaType]) => {
-    // Combine calculated data
-    const location = {
-      areaCode,
-      areaName,
-      areaType,
-      slug: `${areaType}/${paramCase(areaName)}`,
-      population: populationData[areaCode],
-      rank: rankData[areaCode],
-      history: historyData[areaCode],
-      summary: summaryData[areaCode],
-    };
-
-    // Add to Gatsby nodes
-    const nodeContent = JSON.stringify(location);
-    const nodeMeta = {
-      id: createNodeId(areaCode),
-      parent: null,
-      children: [],
-      internal: {
-        type: `Location`,
-        mediaType: `application/json`,
-        content: nodeContent,
-        contentDigest: createContentDigest(location),
-      },
-    };
-    createNode({ ...location, ...nodeMeta });
-  });
+      };
+      createNode({ ...location, ...nodeMeta });
+    });
 };

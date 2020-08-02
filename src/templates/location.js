@@ -38,9 +38,6 @@ export const query = graphql`
           areaType
           rank
           slug
-          summary {
-            top
-          }
         }
       }
     }

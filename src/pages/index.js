@@ -1,26 +1,15 @@
 import { capitalCase } from 'change-case';
-import { Link, graphql, useStaticQuery } from 'gatsby';
+import { graphql, useStaticQuery } from 'gatsby';
 import PropTypes from 'prop-types';
 import React, { useMemo, useState } from 'react';
 
+import NameCell from '../components/cells/name-cell';
 import Layout from '../components/layout';
 import Table from '../components/table';
 import { AREA_TYPES } from '../constants';
+import { getPreviousDaysCasesPer100kPopulation } from '../utils/location';
 
-const NameCell = ({ row, value }) => (
-  <Link to={row.original.slug}>{value}</Link>
-);
-
-NameCell.propTypes = {
-  row: PropTypes.shape({
-    original: PropTypes.shape({
-      slug: PropTypes.string.isRequired,
-    }),
-  }),
-  value: PropTypes.string.isRequired,
-};
-
-const Home = () => {
+const Home = ({ path }) => {
   const { allLocation } = useStaticQuery(graphql`
     query HomeQuery {
       allLocation {
@@ -28,10 +17,36 @@ const Home = () => {
           node {
             areaName
             areaType
+            population
             rank
             slug
             summary {
-              top
+              cases {
+                cumulative {
+                  date
+                  value
+                }
+                new {
+                  date
+                  value
+                }
+                recent {
+                  startDate
+                  values
+                }
+                groupBy
+              }
+              deaths {
+                cumulative {
+                  date
+                  value
+                }
+                new {
+                  date
+                  value
+                }
+                groupBy
+              }
             }
           }
         }
@@ -61,16 +76,20 @@ const Home = () => {
         accessor: 'areaType',
       },
       {
+        Header: 'Cases',
+        accessor: 'summary.cases.cumulative.value',
+      },
+      {
         Header: 'New Cases',
-        accessor: 'cases',
+        accessor: 'summary.cases.new.value',
       },
       {
         Header: 'Population',
-        accessor: 'summary.top',
+        accessor: 'population',
       },
       {
         Header: '7-day Cases per 100,000',
-        accessor: 'cases100k',
+        accessor: 'casesPer100k',
       },
     ],
     []
@@ -83,13 +102,23 @@ const Home = () => {
           ({ node }) => !areaTypeFilter || areaTypeFilter === node.areaType
         )
         .sort(({ node: a }, { node: b }) => a.rank - b.rank)
-        .map(({ node }, index) => ({ ...node, position: index + 1 })),
+        .map(({ node }, index) => ({
+          ...node,
+          position: index + 1,
+          casesPer100k:
+            Math.round(
+              getPreviousDaysCasesPer100kPopulation(
+                node.summary,
+                node.population
+              ) * 10
+            ) / 10,
+        })),
     [allLocation.edges, areaTypeFilter]
   );
   console.log('data', data);
 
   return (
-    <Layout>
+    <Layout currentPath={path}>
       <h1>Home</h1>
       <nav className="tabs">
         <a
@@ -113,6 +142,10 @@ const Home = () => {
       <Table columns={columns} data={data} />
     </Layout>
   );
+};
+
+Home.propTypes = {
+  path: PropTypes.string,
 };
 
 export default Home;

@@ -1,5 +1,5 @@
 const { CORONAVIRUS_API_URL } = require('../constants');
-const { gotJsonLimited } = require('../utils');
+const { gotJsonLimited } = require('../utils/limiter');
 
 const getLocations = async (areaTypes) => {
   const structure = ['areaCode', 'areaName', 'areaType'];
