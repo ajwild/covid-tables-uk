@@ -1,19 +1,20 @@
-import { graphql, useStaticQuery } from 'gatsby';
-import PropTypes from 'prop-types';
-import React, { useMemo, useState } from 'react';
+import { graphql, useStaticQuery, PageProps } from 'gatsby';
+import React, { MouseEvent, useMemo, useState } from 'react';
 
 import NameCell from '../components/cells/name-cell';
 import Layout from '../components/layout';
 import Table from '../components/table';
 import { AREA_TYPES } from '../constants';
+import { Summary } from '../types';
+import { HomeQuery } from '../types/generated/gatsby-graphql';
 import {
   formatAreaType,
   getPreviousDaysCasesPer100kPopulation,
 } from '../utils/location';
 
-const Home = ({ path }) => {
-  const { allLocation } = useStaticQuery(graphql`
-    query HomeQuery {
+const Home = ({ path }: PageProps) => {
+  const { allLocation }: HomeQuery = useStaticQuery(graphql`
+    query Home {
       allLocation {
         edges {
           node {
@@ -56,8 +57,8 @@ const Home = ({ path }) => {
     }
   `);
 
-  const [areaTypeFilter, setAreaTypeFilter] = useState(null);
-  const handleTabClick = (event, areaType) => {
+  const [areaTypeFilter, setAreaTypeFilter] = useState<string | null>(null);
+  const handleTabClick = (event: MouseEvent, areaType: string | null) => {
     event.preventDefault();
     setAreaTypeFilter(areaType);
   };
@@ -75,7 +76,8 @@ const Home = ({ path }) => {
       },
       {
         Header: 'Type',
-        accessor: ({ areaType }) => formatAreaType(areaType),
+        accessor: ({ areaType }: { areaType: string }) =>
+          formatAreaType(areaType),
         id: 'areaType',
       },
       {
@@ -108,18 +110,20 @@ const Home = ({ path }) => {
         .filter(
           ({ node }) => !areaTypeFilter || areaTypeFilter === node.areaType
         )
-        .sort(({ node: a }, { node: b }) => a.rank - b.rank)
-        .map(({ node }, index) => ({
-          ...node,
-          position: index + 1,
-          casesPer100k:
-            Math.round(
-              getPreviousDaysCasesPer100kPopulation(
-                node.summary,
-                node.population
-              ) * 10
-            ) / 10,
-        })),
+        .sort(({ node: a }, { node: b }) => Number(a.rank) - Number(b.rank))
+        .map(({ node }, index) => {
+          const casesPer100k = getPreviousDaysCasesPer100kPopulation(
+            node.summary as Summary,
+            Number(node.population)
+          );
+          return {
+            ...node,
+            position: index + 1,
+            casesPer100k: casesPer100k
+              ? Math.round(casesPer100k * 10 ?? 0) / 10
+              : null,
+          };
+        }),
     [allLocation.edges, areaTypeFilter]
   );
   console.log('data', data);
@@ -129,7 +133,7 @@ const Home = ({ path }) => {
       <h1>Home</h1>
       <nav className="tabs">
         <a
-          className={areaTypeFilter ? null : 'active'}
+          className={areaTypeFilter ? undefined : 'active'}
           href="#"
           onClick={(event) => handleTabClick(event, null)}
         >
@@ -138,7 +142,7 @@ const Home = ({ path }) => {
         {AREA_TYPES.map((areaType) => (
           <a
             key={areaType}
-            className={areaTypeFilter === areaType ? 'active' : null}
+            className={areaTypeFilter === areaType ? 'active' : undefined}
             href="#"
             onClick={(event) => handleTabClick(event, areaType)}
           >
@@ -149,10 +153,6 @@ const Home = ({ path }) => {
       <Table columns={columns} data={data} hiddenColumns={hiddenColumns} />
     </Layout>
   );
-};
-
-Home.propTypes = {
-  path: PropTypes.string,
 };
 
 export default Home;

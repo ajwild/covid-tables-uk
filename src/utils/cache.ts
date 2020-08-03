@@ -1,10 +1,12 @@
-const { MAX_CACHE_AGE } = require('../constants');
+import { GatsbyCache, Reporter } from 'gatsby';
 
-exports.tryCacheWithFallback = async (
-  [cache, cacheKey, reporter],
-  fallbackFn,
-  fallbackArgs = []
-) => {
+import { MAX_CACHE_AGE } from '../constants';
+
+export const tryCacheWithFallback = async (
+  [cache, cacheKey, reporter]: [GatsbyCache, string, Reporter],
+  fallbackFn: (...args: any[]) => Promise<any> | any,
+  fallbackArgs: any[] = []
+): Promise<any> => {
   const args = JSON.stringify(fallbackArgs);
   const cacheResponse = await cache.get(cacheKey);
 
@@ -20,7 +22,7 @@ exports.tryCacheWithFallback = async (
   const data = await fallbackFn(...fallbackArgs);
 
   reporter.info(`Adding "${cacheKey}" data to cache`);
-  // Set cache but don't wait for promise to resolve
-  cache.set(cacheKey, { args, created: Date.now(), data });
+  await cache.set(cacheKey, { args, created: Date.now(), data });
+
   return data;
 };

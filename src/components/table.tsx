@@ -1,8 +1,13 @@
-import PropTypes from 'prop-types';
 import React, { useEffect } from 'react';
-import { useSortBy, useTable } from 'react-table';
+import { useSortBy, useTable, UseTableOptions } from 'react-table';
 
-const Table = ({ columns, data, hiddenColumns }) => {
+type TableProps = {
+  columns: UseTableOptions<any>['columns'];
+  data: UseTableOptions<any>['data'];
+  hiddenColumns: string[];
+};
+
+const Table = ({ columns, data, hiddenColumns }: TableProps) => {
   const {
     getTableProps,
     getTableBodyProps,
@@ -57,12 +62,6 @@ const Table = ({ columns, data, hiddenColumns }) => {
       </tbody>
     </table>
   );
-};
-
-Table.propTypes = {
-  columns: PropTypes.array.isRequired,
-  data: PropTypes.array.isRequired,
-  hiddenColumns: PropTypes.arrayOf(PropTypes.string),
 };
 
 export default Table;

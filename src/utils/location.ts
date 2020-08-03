@@ -1,41 +1,45 @@
-const { capitalCase } = require('change-case');
+import { capitalCase } from 'change-case';
 
-const getCumulativeCases = (summary) => {
-  const { cases: { cumulative: { value = null } = {} } = {} } = summary;
-  return value;
-};
+import { LocationItem, Summary } from '../types';
 
-const getPreviousDaysCases = (summary, days = 7) => {
-  const { cases: { recent: { values } = {} } = {} } = summary;
+const getCumulativeCases = (summary: Summary) =>
+  summary?.cases?.cumulative?.value ?? null;
+
+const getPreviousDaysCases = (summary: Summary, days = 7) => {
+  const values = summary?.cases?.recent?.values ?? null;
   return values
-    ? values
-        .slice(0, days)
-        .reduce((accumulator, value) => accumulator + value, 0)
+    ? values.slice(0, days).reduce(
+        (accumulator: number, value) =>
+          // How common is the null value?
+          // Is it safe to skip, or better to try and load a previous value?
+          value ? accumulator + value : accumulator,
+        0
+      )
     : null;
 };
 
-const per100kPopulation = (value, population) =>
+const per100kPopulation = (value: number | null, population?: number) =>
   value !== null && population ? value / (population / 100000) : null;
 
-exports.getPreviousDaysCasesPer100kPopulation = (
-  summary,
-  population,
+export const getPreviousDaysCasesPer100kPopulation = (
+  summary: Summary,
+  population?: number,
   days = 7
 ) => per100kPopulation(getPreviousDaysCases(summary, days), population);
 
 // Sort (rank) locations based on their summary data
-exports.rankLocations = (
-  summaryData,
-  populationData,
+export const rankLocations = (
+  summaryData: { [areaCode: string]: Summary },
+  populationData: { [areaCode: string]: number },
   days = 7,
   tiebreakers = 7
-) => ([areaCodeA], [areaCodeB]) => {
+) => ([areaCodeA]: LocationItem, [areaCodeB]: LocationItem) => {
   for (let offset = 0; offset <= tiebreakers; offset++) {
     const [sevenDayCasesPer100kA, sevenDayCasesPer100kB] = [
       areaCodeA,
       areaCodeB,
     ].map((areaCode) =>
-      exports.getPreviousDaysCasesPer100kPopulation(
+      getPreviousDaysCasesPer100kPopulation(
         summaryData[areaCode],
         populationData[areaCode],
         days + offset
@@ -74,5 +78,5 @@ exports.rankLocations = (
   return areaCodeA > areaCodeB ? 1 : -1;
 };
 
-exports.formatAreaType = (areaType) =>
+export const formatAreaType = (areaType: string) =>
   areaType.slice(1) === 'tla' ? areaType.toUpperCase() : capitalCase(areaType);

@@ -1,11 +1,12 @@
 import { Link } from 'gatsby';
-import PropTypes from 'prop-types';
-import React from 'react';
+import React, { PropsWithChildren } from 'react';
 
 // eslint-disable-next-line import/no-unassigned-import
 import 'chota/dist/chota.min.css';
 
-const Layout = ({ children, currentPath }) => (
+type LayoutProps = { currentPath?: string };
+
+const Layout = ({ children, currentPath }: PropsWithChildren<LayoutProps>) => (
   <div>
     <nav className="nav">
       <div className="nav-left">
@@ -13,7 +14,7 @@ const Layout = ({ children, currentPath }) => (
           COVID-19 UK
         </Link>
         <div className="tabs">
-          <Link className={currentPath === '/' ? 'active' : null} to="/">
+          <Link className={currentPath === '/' ? 'active' : undefined} to="/">
             Home
           </Link>
         </div>
@@ -22,10 +23,5 @@ const Layout = ({ children, currentPath }) => (
     <main>{children}</main>
   </div>
 );
-
-Layout.propTypes = {
-  children: PropTypes.node,
-  currentPath: PropTypes.string,
-};
 
 export default Layout;

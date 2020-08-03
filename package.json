@@ -1,37 +1,43 @@
 {
-  "name": "gatsby-starter-hello-world",
+  "name": "covid-tables-uk",
   "private": true,
-  "description": "A simplified bare-bones starter for Gatsby",
-  "version": "0.1.0",
-  "license": "0BSD",
+  "description": "",
+  "version": "0.0.0",
   "scripts": {
     "build": "gatsby build",
     "develop": "gatsby develop",
-    "format": "prettier --write \"**/*.{js,jsx,ts,tsx,json,md}\"",
+    "format": "xo --fix",
     "start": "npm run develop",
     "serve": "gatsby serve",
     "clean": "gatsby clean",
-    "test": "npm run test:lint",
-    "test:lint": "xo"
+    "test": "npm run test:lint && npm run test:types",
+    "test:lint": "xo",
+    "test:types": "tsc --noEmit"
   },
   "dependencies": {
     "bottleneck": "^2.19.5",
     "change-case": "^4.1.1",
     "chota": "^0.8.0",
     "gatsby": "^2.24.15",
+    "gatsby-plugin-extract-schema": "0.0.5",
+    "gatsby-plugin-graphql-codegen": "^2.7.1",
     "got": "^11.5.1",
-    "prop-types": "^15.7.2",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
-    "react-table": "^7.3.3"
+    "react-table": "^7.3.3",
+    "ts-node": "^8.10.2",
+    "type-fest": "^0.16.0"
   },
   "devDependencies": {
+    "@types/node": "^12.12.53",
     "@types/react": "^16.9.43",
     "@types/react-dom": "^16.9.8",
     "@types/react-table": "^7.0.19",
     "eslint-config-xo-react": "^0.23.0",
+    "eslint-plugin-graphql": "^4.0.0",
     "eslint-plugin-react": "^7.20.5",
     "eslint-plugin-react-hooks": "^4.0.8",
+    "typescript": "^3.9.7",
     "xo": "^0.32.1"
   },
   "repository": {
@@ -41,17 +47,31 @@
   "bugs": {
     "url": "https://github.com/gatsbyjs/gatsby/issues"
   },
+  "engines": {
+    "node": ">=12"
+  },
   "xo": {
     "prettier": true,
     "space": true,
     "envs": [
       "browser",
+      "es2020",
       "node"
     ],
     "extends": [
       "xo-react"
     ],
+    "plugins": [
+      "graphql"
+    ],
     "rules": {
+      "graphql/template-strings": [
+        "error",
+        {
+          "env": "relay",
+          "tagName": "graphql"
+        }
+      ],
       "unicorn/no-reduce": 0
     }
   },

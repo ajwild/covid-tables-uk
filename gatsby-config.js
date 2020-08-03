@@ -1,10 +1,12 @@
-/**
- * Configure your Gatsby site with this file.
- *
- * See: https://www.gatsbyjs.org/docs/gatsby-config/
- */
+require('ts-node').register({
+  // Set `transpileOnly` to true to avoid type errors at the first-time run
+  // when the graphql codegen has never run.
+  // (The chicken or the egg causality dilemma)
+  transpileOnly: true,
+  compilerOptions: {
+    module: 'commonjs',
+    target: 'es6',
+  },
+});
 
-module.exports = {
-  /* Your site config here */
-  plugins: [],
-}
+module.exports = require('./src/gatsby/gatsby-config.ts');
