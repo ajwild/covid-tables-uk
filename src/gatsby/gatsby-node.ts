@@ -8,7 +8,7 @@ import {
 import { resolve } from 'path';
 
 import { AREA_TYPES, CORONAVIRUS_DATA_FIELDS } from '../constants';
-import { CreateLocationPagesQuery } from '../types/generated/gatsby-graphql';
+import { CreateLocationPagesQuery } from '../../generated/gatsby-graphql';
 import { getCoronavirusData } from '../sources/coronavirus';
 import { getLocations } from '../sources/locations';
 import { getPopulations } from '../sources/populations';

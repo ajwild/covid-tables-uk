@@ -4,7 +4,7 @@ module.exports = {
     tagName: 'graphql',
     includes: ['./src/**/*.{ts,tsx}'],
     service: {
-      localSchemaFile: './src/types/generated/gatsby-graphql.json',
+      localSchemaFile: './generated/gatsby-graphql.json',
       name: 'GatsbyJS',
       url: 'http://localhost:8000/___graphql',
     },

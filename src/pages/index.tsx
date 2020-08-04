@@ -6,7 +6,7 @@ import Layout from '../components/layout';
 import Table from '../components/table';
 import { AREA_TYPES } from '../constants';
 import { Summary } from '../types';
-import { HomeQuery } from '../types/generated/gatsby-graphql';
+import { HomeQuery } from '../../generated/gatsby-graphql';
 import {
   formatAreaType,
   getPreviousDaysCasesPer100kPopulation,
