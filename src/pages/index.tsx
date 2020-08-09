@@ -11,6 +11,7 @@ import {
   formatAreaType,
   getPreviousDaysCasesPer100kPopulation,
 } from '../utils/location';
+import { borderRadius } from '../utils/theme';
 
 const Home = () => {
   const { allLocation }: HomeQuery = useStaticQuery(graphql`
@@ -127,6 +128,14 @@ const Home = () => {
 
   const tableColClassName = style({
     margin: 0,
+    $nest: {
+      'table > tbody > tr > td:first-of-type': {
+        borderBottomLeftRadius: borderRadius,
+      },
+      'table > tbody > tr > td:last-of-type': {
+        borderBottomRightRadius: borderRadius,
+      },
+    },
   });
 
   return (

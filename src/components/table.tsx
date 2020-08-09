@@ -43,16 +43,14 @@ const Table = ({ columns, data, hiddenColumns }: TableProps) => {
         backgroundImage: backgroundNoise,
         boxShadow: `0 2px 1px ${shadowColor.toString()}`,
       },
-      '& > tbody > tr': {
-        backgroundColor: pageColor.toHexString(),
-      },
-      '& > tbody > tr:nth-of-type(2n)': {
-        backgroundColor: pageColor.darken('1%').toHexString(),
-      },
       '& > tbody > tr > td': {
         position: 'relative',
         zIndex: 1,
+        backgroundColor: pageColor.toHexString(),
         boxShadow: `0 0 1px ${shadowColor.fade('20%').toString()}`,
+      },
+      '& > tbody > tr:nth-of-type(2n) > td': {
+        backgroundColor: pageColor.darken('1%').toHexString(),
       },
     },
   });
