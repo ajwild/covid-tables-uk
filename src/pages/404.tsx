@@ -1,5 +1,7 @@
 import React from 'react';
 
-const Error404 = () => <h1>404 Error</h1>;
+import PageTitle from '../components/page-title';
+
+const Error404 = () => <PageTitle text="404 Error" />;
 
 export default Error404;

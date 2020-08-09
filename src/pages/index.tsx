@@ -3,6 +3,7 @@ import React, { useMemo } from 'react';
 import { style } from 'typestyle';
 
 import NameCell from '../components/cells/name-cell';
+import PageTitle from '../components/page-title';
 import Table from '../components/table';
 import { Summary } from '../types';
 import { HomeQuery } from '../../generated/gatsby-graphql';
@@ -10,13 +11,6 @@ import {
   formatAreaType,
   getPreviousDaysCasesPer100kPopulation,
 } from '../utils/location';
-import {
-  backgroundNoise,
-  borderRadius,
-  primaryColor,
-  shadowColor,
-  textColorInverted,
-} from '../utils/theme';
 
 const Home = () => {
   const { allLocation }: HomeQuery = useStaticQuery(graphql`
@@ -131,32 +125,13 @@ const Home = () => {
     title: formatAreaType(areaTypeFilter),
   };
 
-  const tableTitleRowClassName = style({
-    position: 'sticky',
-    top: 'var(--page-title-offset)',
-    zIndex: 5,
-    backgroundColor: primaryColor.toHexString(),
-    backgroundImage: backgroundNoise,
-    borderRadius: `${String(borderRadius)} ${String(borderRadius)} 0 0`,
-    boxShadow: `0 2px 2px ${shadowColor.toString()}`,
-    color: textColorInverted.toHexString(),
-  });
-
-  const tableTitleClassName = style({
-    padding: 'var(--page-title-padding-top) 0.5em 0',
-  });
-
   const tableColClassName = style({
     margin: 0,
   });
 
   return (
     <>
-      <div className={tableTitleRowClassName}>
-        <h1 className={tableTitleClassName}>
-          {formatAreaType(areaTypeFilter)}
-        </h1>
-      </div>
+      <PageTitle text={formatAreaType(areaTypeFilter)} />
       <div className={tableColClassName}>
         <Table {...tableProperties} />
       </div>
