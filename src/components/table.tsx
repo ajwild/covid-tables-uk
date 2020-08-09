@@ -1,5 +1,13 @@
 import React, { useEffect } from 'react';
 import { useSortBy, useTable, UseTableOptions } from 'react-table';
+import { style } from 'typestyle';
+
+import {
+  backgroundNoise,
+  highlightColor,
+  pageColor,
+  shadowColor,
+} from '../utils/theme';
 
 type TableProps = {
   columns: UseTableOptions<any>['columns'];
@@ -22,8 +30,35 @@ const Table = ({ columns, data, hiddenColumns }: TableProps) => {
     hiddenColumns,
   ]);
 
+  const tableClassName = style({
+    $nest: {
+      '& > thead': {
+        border: 'none',
+      },
+      '& > thead > tr > th': {
+        position: 'sticky',
+        top: 'var(--table-header-offset)',
+        zIndex: 3,
+        backgroundColor: highlightColor.lighten('10%').toHexString(),
+        backgroundImage: backgroundNoise,
+        boxShadow: `0 2px 1px ${shadowColor.toString()}`,
+      },
+      '& > tbody > tr': {
+        backgroundColor: pageColor.toHexString(),
+      },
+      '& > tbody > tr:nth-of-type(2n)': {
+        backgroundColor: pageColor.darken('1%').toHexString(),
+      },
+      '& > tbody > tr > td': {
+        position: 'relative',
+        zIndex: 1,
+        boxShadow: `0 0 1px ${shadowColor.fade('20%').toString()}`,
+      },
+    },
+  });
+
   return (
-    <table {...getTableProps()}>
+    <table className={tableClassName} {...getTableProps()}>
       <thead>
         {headerGroups.map((headerGroup) => (
           // Key provided by getHeaderGroupProps()

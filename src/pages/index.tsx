@@ -1,18 +1,24 @@
-import { graphql, useStaticQuery, PageProps } from 'gatsby';
-import React, { MouseEvent, useMemo, useState } from 'react';
+import { graphql, useStaticQuery } from 'gatsby';
+import React, { useMemo } from 'react';
+import { style } from 'typestyle';
 
 import NameCell from '../components/cells/name-cell';
-import Layout from '../components/layout';
 import Table from '../components/table';
-import { AREA_TYPES } from '../constants';
 import { Summary } from '../types';
 import { HomeQuery } from '../../generated/gatsby-graphql';
 import {
   formatAreaType,
   getPreviousDaysCasesPer100kPopulation,
 } from '../utils/location';
+import {
+  backgroundNoise,
+  borderRadius,
+  primaryColor,
+  shadowColor,
+  textColorInverted,
+} from '../utils/theme';
 
-const Home = ({ path }: PageProps) => {
+const Home = () => {
   const { allLocation }: HomeQuery = useStaticQuery(graphql`
     query Home {
       allLocation {
@@ -57,16 +63,10 @@ const Home = ({ path }: PageProps) => {
     }
   `);
 
-  const [areaTypeFilter, setAreaTypeFilter] = useState<string | null>(null);
-  const handleTabClick = (event: MouseEvent, areaType: string | null) => {
-    event.preventDefault();
-    setAreaTypeFilter(areaType);
-  };
-
   const columns = useMemo(
     () => [
       {
-        Header: 'Position',
+        Header: 'Top',
         accessor: 'position',
       },
       {
@@ -81,16 +81,12 @@ const Home = ({ path }: PageProps) => {
         id: 'areaType',
       },
       {
-        Header: 'Cases',
+        Header: 'Total Cases',
         accessor: 'summary.cases.cumulative.value',
       },
       {
         Header: 'New Cases',
         accessor: 'summary.cases.new.value',
-      },
-      {
-        Header: 'Population',
-        accessor: 'population',
       },
       {
         Header: '7-day Cases per 100,000',
@@ -100,6 +96,7 @@ const Home = ({ path }: PageProps) => {
     []
   );
 
+  const areaTypeFilter = null;
   const hiddenColumns = useMemo(() => (areaTypeFilter ? ['areaType'] : []), [
     areaTypeFilter,
   ]);
@@ -118,7 +115,7 @@ const Home = ({ path }: PageProps) => {
           );
           return {
             ...node,
-            position: index + 1,
+            position: Number(index) + 1,
             casesPer100k: casesPer100k
               ? Math.round(casesPer100k * 10 ?? 0) / 10
               : null,
@@ -126,32 +123,44 @@ const Home = ({ path }: PageProps) => {
         }),
     [allLocation.edges, areaTypeFilter]
   );
-  console.log('data', data);
+
+  const tableProperties = {
+    columns,
+    data,
+    hiddenColumns,
+    title: formatAreaType(areaTypeFilter),
+  };
+
+  const tableTitleRowClassName = style({
+    position: 'sticky',
+    top: 'var(--page-title-offset)',
+    zIndex: 5,
+    backgroundColor: primaryColor.toHexString(),
+    backgroundImage: backgroundNoise,
+    borderRadius: `${String(borderRadius)} ${String(borderRadius)} 0 0`,
+    boxShadow: `0 2px 2px ${shadowColor.toString()}`,
+    color: textColorInverted.toHexString(),
+  });
+
+  const tableTitleClassName = style({
+    padding: 'var(--page-title-padding-top) 0.5em 0',
+  });
+
+  const tableColClassName = style({
+    margin: 0,
+  });
 
   return (
-    <Layout currentPath={path}>
-      <h1>Home</h1>
-      <nav className="tabs">
-        <a
-          className={areaTypeFilter ? undefined : 'active'}
-          href="#"
-          onClick={(event) => handleTabClick(event, null)}
-        >
-          All
-        </a>
-        {AREA_TYPES.map((areaType) => (
-          <a
-            key={areaType}
-            className={areaTypeFilter === areaType ? 'active' : undefined}
-            href="#"
-            onClick={(event) => handleTabClick(event, areaType)}
-          >
-            {formatAreaType(areaType)}
-          </a>
-        ))}
-      </nav>
-      <Table columns={columns} data={data} hiddenColumns={hiddenColumns} />
-    </Layout>
+    <>
+      <div className={tableTitleRowClassName}>
+        <h1 className={tableTitleClassName}>
+          {formatAreaType(areaTypeFilter)}
+        </h1>
+      </div>
+      <div className={tableColClassName}>
+        <Table {...tableProperties} />
+      </div>
+    </>
   );
 };
 

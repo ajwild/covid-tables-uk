@@ -1,27 +1,59 @@
-import { Link } from 'gatsby';
-import React, { PropsWithChildren } from 'react';
+import React, { ReactNode } from 'react';
+import { style } from 'typestyle';
 
-// eslint-disable-next-line import/no-unassigned-import
-import 'chota/dist/chota.min.css';
+import Header from './header';
+import {
+  backgroundColor,
+  backgroundNoise,
+  borderRadius,
+  loadTheme,
+  pageColor,
+  primaryColor,
+  shadowColor,
+} from '../utils/theme';
 
-type LayoutProps = { currentPath?: string };
+loadTheme();
 
-const Layout = ({ children, currentPath }: PropsWithChildren<LayoutProps>) => (
-  <div>
-    <nav className="nav">
-      <div className="nav-left">
-        <Link className="brand" to="/">
-          COVID-19 UK
-        </Link>
-        <div className="tabs">
-          <Link className={currentPath === '/' ? 'active' : undefined} to="/">
-            Home
-          </Link>
-        </div>
-      </div>
-    </nav>
-    <main>{children}</main>
-  </div>
+const backdropClassName = style({
+  position: 'fixed',
+  zIndex: -1,
+  top: 0,
+  bottom: 0,
+  left: 0,
+  right: 0,
+  backgroundColor: backgroundColor.toHexString(),
+  backgroundImage: `
+    ${backgroundNoise},
+    repeating-linear-gradient(
+      105deg,
+      transparent,
+      transparent 49px,
+      ${primaryColor.fade('15%').toString()} 49px,
+      ${primaryColor.fade('15%').toString()} 50px
+    ),
+    radial-gradient(
+      circle at 80% 20%,
+      ${backgroundColor.lighten('10%').toHexString()} 0%,
+      ${backgroundColor.darken('10%').toHexString()} 100%
+    )
+  `,
+});
+
+const mainClassName = style({
+  margin: 'calc(var(--header-height-with-skew) + 1em) 0 2em',
+  backgroundColor: pageColor.toHexString(),
+  borderRadius,
+  boxShadow: `0 0 4px ${String(shadowColor.toString())}`,
+});
+
+const Layout = ({ children }: { children: ReactNode }) => (
+  <>
+    <div className={backdropClassName} />
+    <Header />
+    <div className="container">
+      <main className={mainClassName}>{children}</main>
+    </div>
+  </>
 );
 
 export default Layout;

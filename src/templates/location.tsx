@@ -1,17 +1,12 @@
 import { graphql, PageProps } from 'gatsby';
 import React from 'react';
 
-import Layout from '../components/layout';
 import { LocationQuery } from '../../generated/gatsby-graphql';
 
 const Location = ({ data }: PageProps<LocationQuery>) => {
   const location = data.allLocation.edges[0].node;
 
-  return (
-    <Layout>
-      <h1>{location.areaName}</h1>
-    </Layout>
-  );
+  return <h1>{location.areaName}</h1>;
 };
 
 export default Location;

@@ -1,6 +1,6 @@
 export const AREA_TYPES = ['nation', 'region' /* , 'utla', 'ltla' */];
 export const CORONAVIRUS_API_URL =
-  'https://api.coronavirus-staging.data.gov.uk';
+  'https://api.coronavirus.data.gov.uk';
 export const CORONAVIRUS_DATA_FIELDS = [
   'areaCode',
   'date',
@@ -36,5 +36,6 @@ export const CORONAVIRUS_DATA_FIELDS = [
   // 'cumPillarFourTestsByPublishDate',
   // 'newPillarFourTestsByPublishDate',
 ];
+export const DEFAULT_AREA_TYPE = AREA_TYPES[0];
 export const MAX_CACHE_AGE = 1000 * 60 * 60 * 24;
 export const ONS_API_URL = 'https://api.beta.ons.gov.uk';

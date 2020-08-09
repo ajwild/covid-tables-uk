@@ -1,6 +1,7 @@
 import { paramCase } from 'change-case';
 import {
   CreatePagesArgs,
+  CreateWebpackConfigArgs,
   GatsbyNode,
   NodeInput,
   SourceNodesArgs,
@@ -47,6 +48,17 @@ export const createPages: GatsbyNode['createPages'] = async ({
       component: resolve('./src/templates/location.tsx'),
       context: node,
     });
+  });
+};
+
+export const onCreateWebpackConfig = ({ actions }: CreateWebpackConfigArgs) => {
+  actions.setWebpackConfig({
+    node: {
+      fs: 'empty',
+    },
+    resolve: {
+      modules: [resolve(__dirname, 'src'), 'node_modules'],
+    },
   });
 };
 

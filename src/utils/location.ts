@@ -1,5 +1,3 @@
-import { capitalCase } from 'change-case';
-
 import { LocationItem, Summary } from '../types';
 
 const getCumulativeCases = (summary: Summary) =>
@@ -78,5 +76,12 @@ export const rankLocations = (
   return areaCodeA > areaCodeB ? 1 : -1;
 };
 
-export const formatAreaType = (areaType: string) =>
-  areaType.slice(1) === 'tla' ? areaType.toUpperCase() : capitalCase(areaType);
+export const formatAreaType = (areaType: string | null) => {
+  const nameMap = {
+    nation: 'National',
+    region: 'Regional',
+    utla: 'UTLA',
+    ltla: 'LTLA',
+  };
+  return areaType ? nameMap[areaType as keyof typeof nameMap] : 'All Locations';
+};
