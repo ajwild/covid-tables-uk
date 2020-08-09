@@ -1,6 +1,8 @@
 import { cssRaw, cssRule } from 'typestyle';
 import { color } from 'csx';
 
+import { SHOW_VERTICAL_RHYTHM_RULES } from '../constants';
+
 const removeUnits = (value: string) => Number.parseFloat(value);
 
 export const backgroundColor = color('#bdd5ea');
@@ -100,7 +102,7 @@ const loadElementStyles = () => {
     wordBreak: 'normal',
   });
   cssRule('th, td', {
-    padding: '0.5em 1em',
+    padding: '0.75em 1em',
   });
   cssRule('th', {
     fontWeight: 'normal',
@@ -109,6 +111,28 @@ const loadElementStyles = () => {
 };
 
 const loadLayoutStyles = () => {
+  cssRule(
+    'body::before',
+    SHOW_VERTICAL_RHYTHM_RULES
+      ? {
+          content: '""',
+          position: 'absolute',
+          top: '-17px',
+          bottom: 0,
+          left: 0,
+          right: 0,
+          zIndex: 100,
+          backgroundImage: `
+            repeating-linear-gradient(
+              to bottom,
+              transparent 0,
+              transparent calc(1.5em - 1px),
+              #000 1.5em
+            )
+          `,
+        }
+      : {}
+  );
   cssRule('.container', {
     minWidth,
     maxWidth,
