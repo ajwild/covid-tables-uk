@@ -147,28 +147,16 @@ export const prepareSummaryData = (
           'newCasesBySpecimenDate',
           historyData[areaCode]
         ),
-        cumDeathsByDeathDate: getLatest(
-          'cumDeathsByDeathDate',
+        cumDeaths28DaysByPublishDate: getLatest(
+          'cumDeaths28DaysByPublishDate',
           historyData[areaCode]
         ),
-        newDeathsByDeathDate: getLatest(
-          'newDeathsByDeathDate',
+        newDeaths28DaysByPublishDate: getLatest(
+          'newDeaths28DaysByPublishDate',
           historyData[areaCode]
         ),
-        recDeathsByDeathDate: getRecent(
-          'newDeathsByDeathDate',
-          historyData[areaCode]
-        ),
-        cumDeathsByPublishDate: getLatest(
-          'cumDeathsByPublishDate',
-          historyData[areaCode]
-        ),
-        newDeathsByPublishDate: getLatest(
-          'newDeathsByPublishDate',
-          historyData[areaCode]
-        ),
-        recDeathsByPublishDate: getRecent(
-          'newDeathsByPublishDate',
+        recDeaths28DaysByPublishDate: getRecent(
+          'newDeaths28DaysByPublishDate',
           historyData[areaCode]
         ),
         cumTestsByPublishDate: getLatest(
@@ -191,10 +179,7 @@ export const prepareSummaryData = (
           'SpecimenDate',
           'PublishDate',
         ]),
-        deaths: generateSummaryGroup(summary, 'Deaths', [
-          'DeathDate',
-          'PublishDate',
-        ]),
+        deaths: generateSummaryGroup(summary, 'Deaths28Days', ['PublishDate']),
         tests: generateSummaryGroup(summary, 'Tests', ['PublishDate']),
       };
 
