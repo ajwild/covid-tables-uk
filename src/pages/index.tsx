@@ -1,5 +1,5 @@
 import { graphql, useStaticQuery } from 'gatsby';
-import React, { useMemo } from 'react';
+import React, { ReactFragment, useMemo } from 'react';
 import { style } from 'typestyle';
 
 import NameCell from '../components/cells/name-cell';
@@ -13,7 +13,7 @@ import {
 } from '../utils/location';
 import { borderRadius } from '../utils/theme';
 
-const Home = () => {
+const Home = (): ReactFragment => {
   const { allLocation }: HomeQuery = useStaticQuery(graphql`
     query Home {
       allLocation {
@@ -71,7 +71,7 @@ const Home = () => {
       },
       {
         Header: 'Type',
-        accessor: ({ areaType }: { areaType: string }) =>
+        accessor: ({ areaType }: { readonly areaType: string }) =>
           formatAreaType(areaType),
         id: 'areaType',
       },

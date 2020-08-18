@@ -1,6 +1,8 @@
 import { CoronavirusItem, HistoryData } from '../types';
 
-export const prepareHistoryData = (coronavirusData: CoronavirusItem[]) => {
+export const prepareHistoryData = (
+  coronavirusData: readonly CoronavirusItem[]
+): HistoryData => {
   // Group coronavirus data by areaCode in mapped array
   const historyDataRaw: HistoryData = coronavirusData.reduce<HistoryData>(
     (accumulator, { areaCode, ...data }) => ({
@@ -14,7 +16,7 @@ export const prepareHistoryData = (coronavirusData: CoronavirusItem[]) => {
   return Object.keys(historyDataRaw).reduce<HistoryData>(
     (accumulator, areaCode) => ({
       ...accumulator,
-      [areaCode]: historyDataRaw[areaCode].sort((a, b) =>
+      [areaCode]: [...historyDataRaw[areaCode]].sort((a, b) =>
         a.date > b.date ? -1 : 1
       ),
     }),

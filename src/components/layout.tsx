@@ -1,4 +1,4 @@
-import React, { ReactNode } from 'react';
+import React, { ReactElement, ReactNode } from 'react';
 import { style } from 'typestyle';
 
 import Header from './header';
@@ -46,7 +46,11 @@ const mainClassName = style({
   boxShadow: `0 0 4px ${String(shadowColor.toString())}`,
 });
 
-const Layout = ({ children }: { children: ReactNode }) => (
+const Layout = ({
+  children,
+}: {
+  readonly children: ReactNode;
+}): ReactElement => (
   <>
     <div className={backdropClassName} />
     <Header />

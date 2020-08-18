@@ -1,3 +1,5 @@
+/* eslint-disable functional/prefer-type-literal, @typescript-eslint/ban-types */
+
 // Add plugins using the template at the following link:
 // https://github.com/DefinitelyTyped/DefinitelyTyped/tree/master/types/react-table
 

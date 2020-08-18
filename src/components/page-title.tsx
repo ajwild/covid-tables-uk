@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { ReactElement } from 'react';
 import { style } from 'typestyle';
 
 import {
@@ -10,7 +10,7 @@ import {
 } from '../utils/theme';
 
 type PageTitleProps = {
-  text: string;
+  readonly text: string;
 };
 
 const tableTitleRowClassName = style({
@@ -28,7 +28,7 @@ const tableTitleClassName = style({
   padding: 'var(--page-title-padding-top) 0.5em 0',
 });
 
-const PageTitle = ({ text }: PageTitleProps) => (
+const PageTitle = ({ text }: PageTitleProps): ReactElement => (
   <div className={tableTitleRowClassName}>
     <h1 className={tableTitleClassName}>{text}</h1>
   </div>

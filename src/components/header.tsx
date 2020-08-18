@@ -1,8 +1,8 @@
-import React, { MouseEvent, useState } from 'react';
+import React, { /* MouseEvent, */ ReactElement /* useState */ } from 'react';
 import { style } from 'typestyle';
 
-import Menu from './menu';
-import { DEFAULT_AREA_TYPE } from '../constants';
+// Import Menu from './menu';
+// import { DEFAULT_AREA_TYPE } from '../constants';
 import {
   backgroundNoise,
   highlightColor,
@@ -88,14 +88,14 @@ const titleClassName = style({
   fontSize: '2em',
 });
 
-const Header = () => {
-  const [areaTypeFilter, setAreaTypeFilter] = useState<string | null>(
-    DEFAULT_AREA_TYPE
-  );
-  const handleMenuItemClick = (event: MouseEvent, areaType: string | null) => {
-    event.preventDefault();
-    setAreaTypeFilter(areaType);
-  };
+const Header = (): ReactElement => {
+  // Const [areaTypeFilter, setAreaTypeFilter] = useState<string | null>(
+  //   DEFAULT_AREA_TYPE
+  // );
+  // const handleMenuItemClick = (event: MouseEvent, areaType: string | null) => {
+  //   event.preventDefault();
+  //   setAreaTypeFilter(areaType);
+  // };
 
   return (
     <nav className={navClassName}>

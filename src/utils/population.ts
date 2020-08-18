@@ -1,5 +1,4 @@
-type Populations = Array<{ areaCode: string; population: number }>;
-type PopulationData = { [areaCode: string]: number };
+import { PopulationData, Populations } from '../types';
 
 // Convert population data array to mapped object
 export const preparePopulationData = (

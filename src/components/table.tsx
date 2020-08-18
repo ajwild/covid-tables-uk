@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, ReactElement } from 'react';
 import { useSortBy, useTable, UseTableOptions } from 'react-table';
 import { style } from 'typestyle';
 
@@ -10,12 +10,12 @@ import {
 } from '../utils/theme';
 
 type TableProps = {
-  columns: UseTableOptions<any>['columns'];
-  data: UseTableOptions<any>['data'];
-  hiddenColumns: string[];
+  readonly columns: UseTableOptions<any>['columns'];
+  readonly data: UseTableOptions<any>['data'];
+  readonly hiddenColumns: readonly string[];
 };
 
-const Table = ({ columns, data, hiddenColumns }: TableProps) => {
+const Table = ({ columns, data, hiddenColumns }: TableProps): ReactElement => {
   const {
     getTableProps,
     getTableBodyProps,
@@ -25,7 +25,8 @@ const Table = ({ columns, data, hiddenColumns }: TableProps) => {
     setHiddenColumns,
   } = useTable({ columns, data }, useSortBy);
 
-  useEffect(() => setHiddenColumns(hiddenColumns), [
+  // eslint-disable-next-line functional/prefer-readonly-type
+  useEffect(() => setHiddenColumns(hiddenColumns as string[]), [
     setHiddenColumns,
     hiddenColumns,
   ]);

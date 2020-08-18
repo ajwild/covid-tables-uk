@@ -1,10 +1,11 @@
 import { WrapPageElementBrowserArgs } from 'gatsby';
-import React from 'react';
+import React, { ReactElement } from 'react';
 import { setStylesTarget } from 'typestyle';
 
 import Layout from '../components/layout';
 
-export const onInitialClientRender = () => {
+// eslint-disable-next-line functional/no-return-void
+export const onInitialClientRender = (): void => {
   const stylesTarget = document.querySelector('#styles-target');
   if (stylesTarget) {
     setStylesTarget(stylesTarget);
@@ -14,4 +15,6 @@ export const onInitialClientRender = () => {
 export const wrapPageElement = ({
   element,
   props,
-}: WrapPageElementBrowserArgs) => <Layout {...props}>{element}</Layout>;
+}: WrapPageElementBrowserArgs): ReactElement => (
+  <Layout {...props}>{element}</Layout>
+);

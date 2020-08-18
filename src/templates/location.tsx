@@ -1,10 +1,10 @@
 import { graphql, PageProps } from 'gatsby';
-import React from 'react';
+import React, { ReactElement } from 'react';
 
 import PageTitle from '../components/page-title';
 import { LocationQuery } from '../../generated/gatsby-graphql';
 
-const Location = ({ data }: PageProps<LocationQuery>) => {
+const Location = ({ data }: PageProps<LocationQuery>): ReactElement => {
   const location = data.allLocation.edges[0].node;
 
   return <PageTitle text={location.areaName as string} />;

@@ -1,11 +1,11 @@
 import { readFileSync } from 'fs';
 import { RenderBodyArgs, WrapPageElementNodeArgs } from 'gatsby';
-import React from 'react';
+import React, { ReactElement } from 'react';
 import { createTypeStyle, getStyles } from 'typestyle';
 
 import Layout from '../components/layout';
 
-const createStyleElement = (id: string, style: string) => (
+const createStyleElement = (id: string, style: string): ReactElement => (
   <style
     key={id}
     // eslint-disable-next-line react/no-danger
@@ -14,7 +14,8 @@ const createStyleElement = (id: string, style: string) => (
   />
 );
 
-export const onRenderBody = ({ setHeadComponents }: RenderBodyArgs) => {
+// eslint-disable-next-line functional/no-return-void
+export const onRenderBody = ({ setHeadComponents }: RenderBodyArgs): void => {
   const globalStyles = createTypeStyle();
   [
     'node_modules/sanitize.css/sanitize.css',
@@ -34,4 +35,6 @@ export const onRenderBody = ({ setHeadComponents }: RenderBodyArgs) => {
 export const wrapPageElement = ({
   element,
   props,
-}: WrapPageElementNodeArgs) => <Layout {...props}>{element}</Layout>;
+}: WrapPageElementNodeArgs): ReactElement => (
+  <Layout {...props}>{element}</Layout>
+);

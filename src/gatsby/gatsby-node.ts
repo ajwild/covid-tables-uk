@@ -51,7 +51,10 @@ export const createPages: GatsbyNode['createPages'] = async ({
   });
 };
 
-export const onCreateWebpackConfig = ({ actions }: CreateWebpackConfigArgs) => {
+export const onCreateWebpackConfig = ({
+  actions,
+}: // eslint-disable-next-line functional/no-return-void
+CreateWebpackConfigArgs): void => {
   actions.setWebpackConfig({
     node: {
       fs: 'empty',
@@ -83,7 +86,7 @@ export const sourceNodes: GatsbyNode['sourceNodes'] = async ({
   );
   const coronavirusData = await tryCacheWithFallback(
     [cache, 'coronavirusData', reporter],
-    async (areaTypes: string[], dataFields: string[]) => {
+    async (areaTypes: readonly string[], dataFields: readonly string[]) => {
       const groupedData = await Promise.all(
         areaTypes.map(async (areaType) =>
           getCoronavirusData(areaType, dataFields)
@@ -103,7 +106,7 @@ export const sourceNodes: GatsbyNode['sourceNodes'] = async ({
     .sort(rankLocations(summaryData, populationData))
     .forEach(
       (
-        [areaCode, areaName, areaType]: [string, string, string],
+        [areaCode, areaName, areaType]: readonly [string, string, string],
         index: number
       ) => {
         // Combine calculated data

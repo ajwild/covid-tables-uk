@@ -7,20 +7,20 @@ import {
   SummaryItems,
 } from '../types';
 
-const getDateString = (offset = 0) => {
+const getDateString = (offset = 0): string => {
   return new Date(new Date().setDate(new Date().getDate() + offset))
     .toISOString()
     .slice(0, 10);
 };
 
-const getDateDifference = (firstDate: string, secondDate: string) => {
+const getDateDifference = (firstDate: string, secondDate: string): number => {
   const oneDay = 24 * 60 * 60 * 1000;
   return Math.round((Date.parse(firstDate) - Date.parse(secondDate)) / oneDay);
 };
 
 const getLatest = (
   field: string,
-  list: Array<{ [key: string]: any }>
+  list: ReadonlyArray<{ readonly [key: string]: any }>
 ): SummaryItemLatest => {
   const todaysDate = getDateString();
   const item = list.find(
@@ -31,12 +31,15 @@ const getLatest = (
 
 const getRecent = (
   field: string,
-  list: Array<{
-    [key: string]: any;
-    date: string;
+  list: ReadonlyArray<{
+    readonly [key: string]: any;
+    readonly date: string;
   }>,
   days = 15
-) => {
+): {
+  readonly startDate: string;
+  readonly values: ReadonlyArray<number | null>;
+} | null => {
   // Get first non-null item from list
   const todaysDate = getDateString();
   const startIndex = list.findIndex(
@@ -54,9 +57,11 @@ const getRecent = (
     .map((_, dayOffset) => getDateString(startOffset - dayOffset));
 
   // Find date in list or return null
+  // eslint-disable-next-line functional/no-let
   let lastLoopIndex = startIndex;
   const values = dates.map((date) => {
     // For loop used as an optimisation to avoid unnecessary loops
+    // eslint-disable-next-line functional/no-loop-statement, functional/no-let
     for (let i = lastLoopIndex; i < list.length; i++) {
       // Found matching date in list
       if (list[i].date === date) {
@@ -81,7 +86,11 @@ const generateSummaryGroup = (
   group: string,
   groupNames = ['']
 ): SummaryGroupItem => {
-  const types: Array<keyof SummaryGroupItem> = ['cumulative', 'new', 'recent'];
+  const types: ReadonlyArray<keyof SummaryGroupItem> = [
+    'cumulative',
+    'new',
+    'recent',
+  ];
   const groupResults = groupNames
     .map((groupName) => {
       const field = groupName ? `${group}By${groupName}` : group;
@@ -116,8 +125,8 @@ const generateSummaryGroup = (
 // Generate a summary of the history data for each areaCode
 export const prepareSummaryData = (
   historyData: HistoryData
-): { [areaCode: string]: Summary } =>
-  Object.keys(historyData).reduce<{ [areaCode: string]: Summary }>(
+): { readonly [areaCode: string]: Summary } =>
+  Object.keys(historyData).reduce<{ readonly [areaCode: string]: Summary }>(
     (accumulator, areaCode) => {
       const summary: SummaryItems = {
         cumAdmissions: getLatest('cumAdmissions', historyData[areaCode]),

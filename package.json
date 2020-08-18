@@ -36,6 +36,7 @@
     "@types/react-dom": "^16.9.8",
     "@types/react-table": "^7.0.22",
     "eslint-config-xo-react": "^0.23.0",
+    "eslint-plugin-functional": "^3.0.1",
     "eslint-plugin-graphql": "^4.0.0",
     "eslint-plugin-react": "^7.20.6",
     "eslint-plugin-react-hooks": "^4.1.0",
@@ -61,10 +62,13 @@
       "node"
     ],
     "extends": [
-      "xo-react"
+      "xo-react",
+      "plugin:functional/external-recommended",
+      "plugin:functional/lite"
     ],
     "plugins": [
-      "graphql"
+      "graphql",
+      "functional"
     ],
     "rules": {
       "graphql/template-strings": [

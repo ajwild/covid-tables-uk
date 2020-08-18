@@ -1,13 +1,17 @@
 import { Link } from 'gatsby';
-import React, { MouseEvent } from 'react';
+import React, { MouseEvent, ReactElement } from 'react';
 import { classes, media, style } from 'typestyle';
 
 import { AREA_TYPES } from '../constants';
 import { formatAreaType } from '../utils/location';
 
 type MenuProps = {
-  areaTypeFilter: string | null;
-  handleMenuItemClick: (event: MouseEvent, areaType: string | null) => void;
+  readonly areaTypeFilter: string | null;
+  // eslint-disable-next-line functional/no-mixed-type
+  readonly handleMenuItemClick: (
+    event: MouseEvent,
+    areaType: string | null
+  ) => void; // eslint-disable-line functional/no-return-void
 };
 
 const dropdownMenuClassName = style(
@@ -20,7 +24,10 @@ const tabMenuClassName = style(
   media({ minWidth: 600 }, { display: 'flex' })
 );
 
-const Menu = ({ areaTypeFilter, handleMenuItemClick }: MenuProps) => (
+const Menu = ({
+  areaTypeFilter,
+  handleMenuItemClick,
+}: MenuProps): ReactElement => (
   <>
     <div className={dropdownMenuClassName}>
       <div>{formatAreaType(areaTypeFilter)}</div>

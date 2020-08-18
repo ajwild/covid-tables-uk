@@ -2,14 +2,14 @@ import { CORONAVIRUS_API_URL } from '../constants';
 import { CoronavirusApiResponse } from '../types';
 import { gotJsonLimited } from '../utils/limiter';
 
-type ResponseDataItem = { [key: string]: string };
-type ResponseData = ResponseDataItem[];
+type ResponseDataItem = { readonly [key: string]: string };
+type ResponseData = readonly ResponseDataItem[];
 
 const makeRequest = async (
   areaType: string,
-  dataFields: string[],
+  dataFields: readonly string[],
   nextUrl?: string
-) => {
+): Promise<CoronavirusApiResponse<ResponseDataItem>> => {
   const structure = dataFields.reduce<ResponseDataItem>(
     (accumulator, field) => ({ ...accumulator, [field]: field }),
     {}
@@ -25,7 +25,7 @@ const makeRequest = async (
 
 export const getCoronavirusData = async (
   areaType: string,
-  dataFields: string[],
+  dataFields: readonly string[],
   nextUrl?: string,
   data: ResponseData = []
 ): Promise<ResponseData> => {

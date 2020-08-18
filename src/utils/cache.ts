@@ -3,9 +3,9 @@ import { GatsbyCache, Reporter } from 'gatsby';
 import { MAX_CACHE_AGE } from '../constants';
 
 export const tryCacheWithFallback = async (
-  [cache, cacheKey, reporter]: [GatsbyCache, string, Reporter],
-  fallbackFn: (...args: any[]) => Promise<any> | any,
-  fallbackArgs: any[] = []
+  [cache, cacheKey, reporter]: readonly [GatsbyCache, string, Reporter],
+  fallbackFn: (...args: readonly any[]) => Promise<any> | any,
+  fallbackArgs: readonly any[] = []
 ): Promise<any> => {
   const args = JSON.stringify(fallbackArgs);
   const cacheResponse = await cache.get(cacheKey);

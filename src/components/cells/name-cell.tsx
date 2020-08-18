@@ -1,13 +1,13 @@
 import { Link } from 'gatsby';
-import React from 'react';
+import React, { ReactElement } from 'react';
 import { Row } from 'react-table';
 
 type NameCellProps = {
-  row: Row<{ slug: string }>;
-  value: string;
+  readonly row: Row<{ readonly slug: string }>;
+  readonly value: string;
 };
 
-const NameCell = ({ row, value }: NameCellProps) => (
+const NameCell = ({ row, value }: NameCellProps): ReactElement => (
   <Link to={row.original.slug}>{value}</Link>
 );
 

@@ -3,7 +3,7 @@ import { color } from 'csx';
 
 import { SHOW_VERTICAL_RHYTHM_RULES } from '../constants';
 
-const removeUnits = (value: string) => Number.parseFloat(value);
+const removeUnits = (value: string): number => Number.parseFloat(value);
 
 export const backgroundColor = color('#bdd5ea');
 export const highlightColor = color('#fe5f55');
@@ -25,7 +25,8 @@ const maxWidth = '80rem';
 const minBaseFontSize = '1em';
 const maxBaseFontSize = '1.5em';
 
-const loadVariables = () => {
+// eslint-disable-next-line functional/no-return-void
+const loadVariables = (): void => {
   cssRaw(`
     :root {
       --page-width: 100vw;
@@ -62,7 +63,8 @@ const loadVariables = () => {
   `);
 };
 
-const loadElementStyles = () => {
+// eslint-disable-next-line functional/no-return-void
+const loadElementStyles = (): void => {
   cssRule('html', {
     fontSize: '100%',
   });
@@ -110,7 +112,8 @@ const loadElementStyles = () => {
   });
 };
 
-const loadLayoutStyles = () => {
+// eslint-disable-next-line functional/no-return-void
+const loadLayoutStyles = (): void => {
   cssRule(
     'body::before',
     SHOW_VERTICAL_RHYTHM_RULES
@@ -144,7 +147,8 @@ const loadLayoutStyles = () => {
   });
 };
 
-export const loadTheme = () => {
+// eslint-disable-next-line functional/no-return-void
+export const loadTheme = (): void => {
   loadVariables();
   loadElementStyles();
   loadLayoutStyles();
