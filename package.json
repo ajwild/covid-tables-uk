@@ -30,11 +30,34 @@
     "type-fest": "^0.16.0",
     "typestyle": "^2.1.0"
   },
+  "devDependenciesComments": {
+    "@typescript-eslint/eslint-plugin conflict": {
+      "comment": [
+        "Forcing version due to conflict between xo and gatsby. ESLint config-validator.js is ",
+        "using @typescript-eslint/eslint-plugin v2.34.0 from gatsby, when it should use v3.10.1 ",
+        "from xo. The configuration for rule @typescript-eslint/require-array-sort-compare was ",
+        "added in v3.2.0."
+      ],
+      "error": [
+        "Error: BaseConfig » eslint-config-xo-typescript:",
+        "Configuration for rule '@typescript-eslint/require-array-sort-compare' is invalid:",
+        "Value [{'ignoreStringArrays':true}] should NOT have more than 0 items."
+      ],
+      "packages": [
+        "@typescript-eslint/eslint-plugin",
+        "@typescript-eslint/parser",
+        "eslint"
+      ]
+    }
+  },
   "devDependencies": {
     "@types/node": "^12.12.56",
     "@types/react": "^16.9.49",
     "@types/react-dom": "^16.9.8",
     "@types/react-table": "^7.0.22",
+    "@typescript-eslint/eslint-plugin": "^3.10.1",
+    "@typescript-eslint/parser": "^3.10.1",
+    "eslint": "^7.6.0",
     "eslint-config-xo-react": "^0.23.0",
     "eslint-plugin-functional": "^3.0.2",
     "eslint-plugin-graphql": "^4.0.0",

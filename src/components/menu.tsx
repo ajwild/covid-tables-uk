@@ -5,9 +5,9 @@ import { classes, media, style } from 'typestyle';
 import { AREA_TYPES } from '../constants';
 import { formatAreaType } from '../utils/location';
 
+// eslint-disable-next-line functional/no-mixed-type
 type MenuProps = {
   readonly areaTypeFilter: string | null;
-  // eslint-disable-next-line functional/no-mixed-type
   readonly handleMenuItemClick: (
     event: MouseEvent,
     areaType: string | null
