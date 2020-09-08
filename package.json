@@ -45,10 +45,10 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/gatsbyjs/gatsby-starter-hello-world"
+    "url": "https://github.com/ajwild/covid-tables-uk"
   },
   "bugs": {
-    "url": "https://github.com/gatsbyjs/gatsby/issues"
+    "url": "https://github.com/ajwild/covid-tables-uk/issues"
   },
   "engines": {
     "node": ">=12"
