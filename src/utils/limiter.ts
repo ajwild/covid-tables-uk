@@ -1,9 +1,11 @@
 import Bottleneck from 'bottleneck';
 import got, { OptionsOfJSONResponseBody } from 'got';
 
+import { LIMITER_MAX_CONCURRENT, LIMITER_MIN_TIME } from '../constants';
+
 const limiter = new Bottleneck({
-  maxConcurrent: 1,
-  minTime: 500,
+  maxConcurrent: LIMITER_MAX_CONCURRENT,
+  minTime: LIMITER_MIN_TIME,
 });
 
 export const gotJsonLimited = async <T>(
