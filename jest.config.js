@@ -11,7 +11,7 @@ module.exports = {
   },
   setupFiles: ['<rootDir>/loadershim.js'],
   setupFilesAfterEnv: ['<rootDir>/jest.setup.js'],
-  testPathIgnorePatterns: ['node_modules', '\\.cache', '<rootDir>.*/public'],
+  testPathIgnorePatterns: ['.cache', 'cypress', 'node_modules', 'public'],
   transform: {
     '^.+\\.[jt]sx?$': '<rootDir>/jest-preprocess.js',
   },

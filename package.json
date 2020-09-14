@@ -5,12 +5,15 @@
   "version": "0.0.0",
   "scripts": {
     "build": "gatsby build",
+    "cypress:open": "cypress open",
+    "cypress:run": "cypress run",
     "develop": "gatsby develop",
     "format": "xo --fix",
     "start": "npm run develop",
     "serve": "gatsby serve",
     "clean": "gatsby clean",
-    "test": "npm run test:lint && npm run test:types && npm run test:unit",
+    "test": "npm run test:lint && npm run test:types && npm run test:unit && npm run test:e2e",
+    "test:e2e": "start-server-and-test develop http://localhost:8000 cypress:run",
     "test:lint": "xo",
     "test:types": "tsc --noEmit",
     "test:unit": "jest"
@@ -52,6 +55,7 @@
     }
   },
   "devDependencies": {
+    "@testing-library/cypress": "^7.0.0",
     "@testing-library/jest-dom": "^5.11.4",
     "@testing-library/react": "^11.0.2",
     "@types/jest": "^26.0.13",
@@ -59,12 +63,15 @@
     "@types/react": "^16.9.49",
     "@types/react-dom": "^16.9.8",
     "@types/react-table": "^7.0.22",
+    "@types/testing-library__cypress": "^5.0.6",
     "@typescript-eslint/eslint-plugin": "^3.10.1",
     "@typescript-eslint/parser": "^3.10.1",
     "babel-jest": "^26.3.0",
     "babel-preset-gatsby": "^0.5.9",
+    "cypress": "^5.1.0",
     "eslint": "^7.6.0",
     "eslint-config-xo-react": "^0.23.0",
+    "eslint-plugin-cypress": "^2.11.1",
     "eslint-plugin-functional": "^3.0.2",
     "eslint-plugin-graphql": "^4.0.0",
     "eslint-plugin-jest": "^24.0.0",
@@ -74,6 +81,7 @@
     "eslint-plugin-testing-library": "^3.8.0",
     "identity-obj-proxy": "^3.0.0",
     "jest": "^26.4.2",
+    "start-server-and-test": "^1.11.3",
     "typescript": "^4.0.2",
     "xo": "^0.33.1"
   },
@@ -100,15 +108,13 @@
       "xo-react",
       "plugin:functional/external-recommended",
       "plugin:functional/lite",
+      "plugin:cypress/recommended",
       "plugin:jest-dom/recommended",
-      "plugin:testing-library/recommended"
+      "plugin:testing-library/react"
     ],
     "plugins": [
       "graphql",
-      "functional",
-      "jest",
-      "jest-dom",
-      "testing-library"
+      "functional"
     ],
     "rules": {
       "graphql/template-strings": [
