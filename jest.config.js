@@ -3,7 +3,6 @@ module.exports = {
   globals: {
     __PATH_PREFIX__: '',
   },
-  moduleDirectories: ['node_modules', 'utils'],
   moduleNameMapper: {
     '.+\\.(css|styl|less|sass|scss)$': 'identity-obj-proxy',
     '.+\\.(jpg|jpeg|png|gif|eot|otf|webp|svg|ttf|woff|woff2|mp4|webm|wav|mp3|m4a|aac|oga)$':
@@ -11,7 +10,7 @@ module.exports = {
   },
   setupFiles: ['<rootDir>/loadershim.js'],
   setupFilesAfterEnv: ['<rootDir>/jest.setup.js'],
-  testPathIgnorePatterns: ['.cache', 'cypress', 'node_modules', 'public'],
+  testPathIgnorePatterns: ['\\.cache', 'cypress', 'node_modules', 'public'],
   transform: {
     '^.+\\.[jt]sx?$': '<rootDir>/jest-preprocess.js',
   },
