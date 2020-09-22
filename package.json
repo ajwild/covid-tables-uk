@@ -5,7 +5,7 @@
   "version": "0.0.0",
   "scripts": {
     "build": "gatsby build",
-    "cypress:open": "cypress open",
+    "cypress:open": "cypress open --config baseUrl=http://localhost:8000",
     "cypress:run": "cypress run",
     "develop": "gatsby develop",
     "format": "xo --fix",
@@ -13,7 +13,8 @@
     "serve": "gatsby serve",
     "clean": "gatsby clean",
     "test": "npm run test:lint && npm run test:types && npm run test:unit && npm run test:e2e",
-    "test:e2e": "start-server-and-test develop http://localhost:8000 cypress:run",
+    "pretest:e2e": "npm run build",
+    "test:e2e": "start-server-and-test serve http://localhost:9000 cypress:run",
     "test:lint": "xo",
     "test:types": "tsc --noEmit",
     "test:unit": "jest"

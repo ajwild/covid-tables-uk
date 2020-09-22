@@ -4,7 +4,7 @@ describe('App', () => {
   });
 
   it('Renders home page', () => {
-    cy.get('[data-testid="website-title"]').should('exist');
+    cy.findByRole('navigation').findByRole('heading').should('exist');
     cy.findByRole('main')
       .findByRole('heading')
       .invoke('text')
