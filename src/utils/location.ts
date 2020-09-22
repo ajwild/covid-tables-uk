@@ -89,5 +89,7 @@ export const formatAreaType = (areaType: string | null): string => {
     utla: 'UTLA',
     ltla: 'LTLA',
   };
-  return areaType ? nameMap[areaType as keyof typeof nameMap] : 'All Locations';
+  return areaType
+    ? nameMap[areaType as keyof typeof nameMap] || 'Unknown'
+    : 'All Locations';
 };

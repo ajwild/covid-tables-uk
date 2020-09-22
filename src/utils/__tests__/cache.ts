@@ -2,7 +2,7 @@ import { Reporter } from 'gatsby';
 
 import { tryCacheWithFallback } from '../cache';
 
-describe('cache', () => {
+describe('utils/cache', () => {
   const mockedGatsbyCache = {
     get: jest.fn(),
     set: jest.fn(),
