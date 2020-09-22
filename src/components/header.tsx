@@ -103,9 +103,7 @@ const Header = (): ReactElement => {
       <div className="layer2" />
       <div className="layer3" />
       <div className="container">
-        <h1 className={titleClassName} data-testid="website-title">
-          COVID-19 Tables UK
-        </h1>
+        <h1 className={titleClassName}>COVID-19 Tables UK</h1>
         {/* <Menu
           areaTypeFilter={areaTypeFilter}
           handleMenuItemClick={handleMenuItemClick}
