@@ -1,8 +1,9 @@
-import { createElement } from 'react';
+const { createElement } = require('react');
 
 const gatsby = jest.requireActual('gatsby');
 
-const mockedGatsby = {
+// eslint-disable-next-line functional/immutable-data
+module.exports = {
   ...gatsby,
   graphql: jest.fn(),
   Link: jest.fn().mockImplementation(
@@ -26,5 +27,3 @@ const mockedGatsby = {
   StaticQuery: jest.fn(),
   useStaticQuery: jest.fn(),
 };
-
-export default mockedGatsby;
