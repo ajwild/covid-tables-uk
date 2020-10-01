@@ -102,10 +102,11 @@ export const sourceNodes: GatsbyNode['sourceNodes'] = async ({
   const historyData = prepareHistoryData(coronavirusData);
   const summaryData = prepareSummaryData(historyData);
 
-  locations
+  [...locations]
     .sort(rankLocations(summaryData, populationData))
-    .forEach(
+    .reduce<{ readonly [areaType: string]: number }>(
       (
+        accumulator,
         [areaCode, areaName, areaType]: readonly [string, string, string],
         index: number
       ) => {
@@ -117,6 +118,7 @@ export const sourceNodes: GatsbyNode['sourceNodes'] = async ({
           slug: `/${areaType}/${String(paramCase(areaName))}`,
           population: populationData[areaCode],
           rank: index + 1,
+          rankByAreaType: (accumulator[areaType] || 0) + 1,
           history: historyData[areaCode],
           summary: summaryData[areaCode],
         };
@@ -134,6 +136,9 @@ export const sourceNodes: GatsbyNode['sourceNodes'] = async ({
         };
         const node: NodeInput = { ...location, ...nodeMeta };
         createNode(node);
-      }
+
+        return { ...accumulator, [areaType]: (accumulator[areaType] || 0) + 1 };
+      },
+      {}
     );
 };
