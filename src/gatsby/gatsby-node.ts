@@ -114,7 +114,7 @@ export const sourceNodes: GatsbyNode['sourceNodes'] = async ({
           areaCode,
           areaName,
           areaType,
-          slug: `${areaType}/${String(paramCase(areaName))}`,
+          slug: `/${areaType}/${String(paramCase(areaName))}`,
           population: populationData[areaCode],
           rank: index + 1,
           history: historyData[areaCode],
