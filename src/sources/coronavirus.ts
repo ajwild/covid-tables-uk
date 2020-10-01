@@ -1,16 +1,13 @@
 import { CORONAVIRUS_API_URL } from '../constants';
-import { CoronavirusApiResponse } from '../types';
+import { CoronavirusApiResponse, CoronavirusItem } from '../types';
 import { gotJsonLimited } from '../utils/limiter';
-
-type ResponseDataItem = { readonly [key: string]: string };
-type ResponseData = readonly ResponseDataItem[];
 
 const makeRequest = async (
   areaType: string,
   dataFields: readonly string[],
   nextUrl?: string
-): Promise<CoronavirusApiResponse<ResponseDataItem>> => {
-  const structure = dataFields.reduce<ResponseDataItem>(
+): Promise<CoronavirusApiResponse<CoronavirusItem>> => {
+  const structure = dataFields.reduce<Partial<CoronavirusItem>>(
     (accumulator, field) => ({ ...accumulator, [field]: field }),
     {}
   );
@@ -20,15 +17,15 @@ const makeRequest = async (
       structure
     )}`;
 
-  return gotJsonLimited<CoronavirusApiResponse<ResponseDataItem>>(url);
+  return gotJsonLimited<CoronavirusApiResponse<CoronavirusItem>>(url);
 };
 
 export const getCoronavirusData = async (
   areaType: string,
   dataFields: readonly string[],
   nextUrl?: string,
-  data: ResponseData = []
-): Promise<ResponseData> => {
+  data: readonly CoronavirusItem[] = []
+): Promise<readonly CoronavirusItem[]> => {
   const response = await makeRequest(areaType, dataFields, nextUrl);
   const mergedData = [...data, ...response.data];
 
