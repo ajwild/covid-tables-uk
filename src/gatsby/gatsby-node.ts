@@ -32,7 +32,9 @@ export const createPages: GatsbyNode['createPages'] = async ({
         allLocation {
           edges {
             node {
+              areaType
               id
+              rankByAreaType
               slug
             }
           }
@@ -41,14 +43,55 @@ export const createPages: GatsbyNode['createPages'] = async ({
     `
   );
 
+  // Count locations by areaType
+  const areaTypeCounts = data?.allLocation?.edges?.reduce<{
+    readonly [areaType: string]: number;
+  }>(
+    (accumulator, { node: { areaType } }) =>
+      areaType
+        ? { ...accumulator, [areaType]: (accumulator[areaType] || 0) + 1 }
+        : accumulator,
+    {}
+  );
+
   // Create page for each location
-  data?.allLocation?.edges?.forEach(({ node }) => {
-    createPage({
-      path: node.slug as string,
-      component: resolve('./src/templates/location.tsx'),
-      context: node,
-    });
-  });
+  data?.allLocation?.edges?.forEach(
+    ({ node: { areaType, id, rankByAreaType, slug } }) => {
+      const displayRanks: readonly number[] =
+        areaType && areaTypeCounts && rankByAreaType
+          ? [
+              1,
+              2,
+              3,
+              rankByAreaType - 2,
+              rankByAreaType - 1,
+              rankByAreaType,
+              rankByAreaType + 1,
+              rankByAreaType + 2,
+              areaTypeCounts[areaType] - 2,
+              areaTypeCounts[areaType] - 1,
+              areaTypeCounts[areaType],
+            ]
+          : [];
+      const uniqueDisplayRanks = displayRanks.reduce<readonly number[]>(
+        (accumulator, value) =>
+          accumulator.includes(value) || value === 0
+            ? accumulator
+            : [...accumulator, value],
+        []
+      );
+
+      createPage({
+        path: slug as string,
+        component: resolve('./src/templates/location.tsx'),
+        context: {
+          id,
+          areaType,
+          displayRanks: uniqueDisplayRanks,
+        },
+      });
+    }
+  );
 };
 
 export const onCreateWebpackConfig = ({
