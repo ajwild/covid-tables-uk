@@ -12,7 +12,7 @@ import {
 type TableProps = {
   readonly columns: UseTableOptions<any>['columns'];
   readonly data: UseTableOptions<any>['data'];
-  readonly hiddenColumns: readonly string[];
+  readonly hiddenColumns?: readonly string[];
 };
 
 const Table = ({ columns, data, hiddenColumns }: TableProps): ReactElement => {
@@ -25,11 +25,11 @@ const Table = ({ columns, data, hiddenColumns }: TableProps): ReactElement => {
     setHiddenColumns,
   } = useTable({ columns, data }, useSortBy);
 
-  // eslint-disable-next-line functional/prefer-readonly-type
-  useEffect(() => setHiddenColumns(hiddenColumns as string[]), [
-    setHiddenColumns,
-    hiddenColumns,
-  ]);
+  useEffect(
+    // eslint-disable-next-line functional/prefer-readonly-type
+    () => hiddenColumns && setHiddenColumns(hiddenColumns as string[]),
+    [setHiddenColumns, hiddenColumns]
+  );
 
   const tableClassName = style({
     $nest: {
