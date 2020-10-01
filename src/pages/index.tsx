@@ -123,7 +123,6 @@ const Home = (): ReactFragment => {
     columns,
     data,
     hiddenColumns,
-    title: formatAreaType(areaTypeFilter),
   };
 
   const tableColClassName = style({
