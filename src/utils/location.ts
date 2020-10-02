@@ -84,8 +84,8 @@ export const rankLocations = (
 
 export const formatAreaType = (areaType: string | null): string => {
   const nameMap = {
-    nation: 'National',
-    region: 'Regional',
+    nation: 'Nation',
+    region: 'Region',
     utla: 'UTLA',
     ltla: 'LTLA',
   };
