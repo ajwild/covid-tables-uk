@@ -23,6 +23,7 @@ const Home = (): ReactFragment => {
             areaType
             population
             rank
+            rankByAreaType
             slug
             summary {
               cases {
@@ -103,14 +104,14 @@ const Home = (): ReactFragment => {
           ({ node }) => !areaTypeFilter || areaTypeFilter === node.areaType
         )
         .sort(({ node: a }, { node: b }) => Number(a.rank) - Number(b.rank))
-        .map(({ node }, index) => {
+        .map(({ node }) => {
           const casesPer100k = getPreviousDaysCasesPer100kPopulation(
             node.summary as Summary,
             Number(node.population)
           );
           return {
             ...node,
-            position: Number(index) + 1,
+            position: areaTypeFilter ? node.rankByAreaType : node.rank,
             casesPer100k: casesPer100k
               ? Math.round(casesPer100k * 10 ?? 0) / 10
               : null,

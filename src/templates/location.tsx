@@ -6,10 +6,7 @@ import PageTitle from '../components/page-title';
 import Table from '../components/table';
 import { LocationQuery } from '../../generated/gatsby-graphql';
 import { Summary } from '../types';
-import {
-  formatAreaType,
-  getPreviousDaysCasesPer100kPopulation,
-} from '../utils/location';
+import { getPreviousDaysCasesPer100kPopulation } from '../utils/location';
 
 const Location = ({ data }: PageProps<LocationQuery>): ReactElement => {
   const location = data.location.edges[0].node;
@@ -46,14 +43,14 @@ const Location = ({ data }: PageProps<LocationQuery>): ReactElement => {
     () =>
       [...tableLocations]
         .sort(({ node: a }, { node: b }) => Number(a.rank) - Number(b.rank))
-        .map(({ node }, index) => {
+        .map(({ node }) => {
           const casesPer100k = getPreviousDaysCasesPer100kPopulation(
             node.summary as Summary,
             Number(node.population)
           );
           return {
             ...node,
-            position: Number(index) + 1,
+            position: node.rankByAreaType,
             casesPer100k: casesPer100k
               ? Math.round(casesPer100k * 10 ?? 0) / 10
               : null,
