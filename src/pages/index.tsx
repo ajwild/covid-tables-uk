@@ -1,5 +1,5 @@
-import { graphql, useStaticQuery } from 'gatsby';
-import React, { ReactFragment, useMemo } from 'react';
+import { graphql, PageProps } from 'gatsby';
+import React, { ReactElement, useMemo } from 'react';
 import { style } from 'typestyle';
 
 import NameCell from '../components/cells/name-cell';
@@ -13,53 +13,8 @@ import {
 } from '../utils/location';
 import { borderRadius } from '../utils/theme';
 
-const Home = (): ReactFragment => {
-  const { allLocation }: HomeQuery = useStaticQuery(graphql`
-    query Home {
-      allLocation {
-        edges {
-          node {
-            areaName
-            areaType
-            population
-            rank
-            rankByAreaType
-            slug
-            summary {
-              cases {
-                cumulative {
-                  date
-                  value
-                }
-                new {
-                  date
-                  value
-                }
-                recent {
-                  startDate
-                  values
-                }
-                groupBy
-              }
-              deaths {
-                cumulative {
-                  date
-                  value
-                }
-                new {
-                  date
-                  value
-                }
-                groupBy
-              }
-            }
-          }
-        }
-      }
-    }
-  `);
-
-  const columns = useMemo(
+const Home = ({ data: { locations } }: PageProps<HomeQuery>): ReactElement => {
+  const tableColumns = useMemo(
     () => [
       {
         Header: 'Top',
@@ -97,9 +52,9 @@ const Home = (): ReactFragment => {
     areaTypeFilter,
   ]);
 
-  const data = useMemo(
+  const tableData = useMemo(
     () =>
-      allLocation.edges
+      locations.edges
         .filter(
           ({ node }) => !areaTypeFilter || areaTypeFilter === node.areaType
         )
@@ -117,12 +72,12 @@ const Home = (): ReactFragment => {
               : null,
           };
         }),
-    [allLocation.edges, areaTypeFilter]
+    [locations.edges, areaTypeFilter]
   );
 
   const tableProperties = {
-    columns,
-    data,
+    columns: tableColumns,
+    data: tableData,
     hiddenColumns,
   };
 
@@ -149,3 +104,48 @@ const Home = (): ReactFragment => {
 };
 
 export default Home;
+
+export const query = graphql`
+  query Home {
+    locations: allLocation {
+      edges {
+        node {
+          areaName
+          areaType
+          population
+          rank
+          rankByAreaType
+          slug
+          summary {
+            cases {
+              cumulative {
+                date
+                value
+              }
+              new {
+                date
+                value
+              }
+              recent {
+                startDate
+                values
+              }
+              groupBy
+            }
+            deaths {
+              cumulative {
+                date
+                value
+              }
+              new {
+                date
+                value
+              }
+              groupBy
+            }
+          }
+        }
+      }
+    }
+  }
+`;
