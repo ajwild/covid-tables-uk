@@ -13,9 +13,19 @@ type TableProps = {
   readonly columns: UseTableOptions<any>['columns'];
   readonly data: UseTableOptions<any>['data'];
   readonly hiddenColumns?: readonly string[];
+  readonly sortable?: boolean;
 };
 
-const Table = ({ columns, data, hiddenColumns }: TableProps): ReactElement => {
+const Table = ({
+  columns,
+  data,
+  hiddenColumns,
+  sortable = true,
+}: TableProps): ReactElement => {
+  // Using flatMap() instead of filter() to avoid further type wrestling
+  const plugins = [sortable ? useSortBy : null].flatMap((plugin) =>
+    plugin === null ? [] : [plugin]
+  );
   const {
     getTableProps,
     getTableBodyProps,
@@ -23,7 +33,7 @@ const Table = ({ columns, data, hiddenColumns }: TableProps): ReactElement => {
     rows,
     prepareRow,
     setHiddenColumns,
-  } = useTable({ columns, data }, useSortBy);
+  } = useTable({ columns, data }, ...plugins);
 
   useEffect(
     // eslint-disable-next-line functional/prefer-readonly-type
@@ -66,7 +76,11 @@ const Table = ({ columns, data, hiddenColumns }: TableProps): ReactElement => {
             {headerGroup.headers.map((column) => (
               // Key provided by getHeaderProps()
               // eslint-disable-next-line react/jsx-key
-              <th {...column.getHeaderProps(column.getSortByToggleProps())}>
+              <th
+                {...column.getHeaderProps(
+                  sortable ? column.getSortByToggleProps() : {}
+                )}
+              >
                 {column.render('Header')}
                 <span>
                   {column.isSorted ? (column.isSortedDesc ? ' ↓' : ' ↑') : '  '}

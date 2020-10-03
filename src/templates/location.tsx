@@ -94,6 +94,7 @@ const Location = ({ data }: PageProps<LocationQuery>): ReactElement => {
     columns: tableColumns,
     // eslint-disable-next-line functional/prefer-readonly-type
     data: tableData as TableRow[],
+    sortable: false,
   };
 
   return (
