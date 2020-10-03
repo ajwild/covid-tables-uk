@@ -42,7 +42,7 @@ const Table = ({ columns, data, hiddenColumns }: TableProps): ReactElement => {
         zIndex: 3,
         backgroundColor: highlightColor.lighten('10%').toHexString(),
         backgroundImage: backgroundNoise,
-        boxShadow: `0 2px 1px ${shadowColor.toString()}`,
+        boxShadow: `0 0 1px ${shadowColor.toString()}`,
       },
       '& > tbody > tr > td': {
         position: 'relative',

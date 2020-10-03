@@ -19,21 +19,31 @@ const Location = ({ data }: PageProps<LocationQuery>): ReactElement => {
         accessor: 'position',
       },
       {
-        Header: 'Name',
-        accessor: 'areaName',
-        Cell: NameCell,
+        Header: 'Location',
+        columns: [
+          {
+            Header: 'Name',
+            accessor: 'areaName',
+            Cell: NameCell,
+          },
+        ],
       },
       {
-        Header: 'Total Cases',
-        accessor: 'summary.cases.cumulative.value',
-      },
-      {
-        Header: 'New Cases',
-        accessor: 'summary.cases.new.value',
-      },
-      {
-        Header: '7-day Cases per 100,000',
-        accessor: 'casesPer100k',
+        Header: 'Cases',
+        columns: [
+          {
+            Header: 'Total',
+            accessor: 'summary.cases.cumulative.value',
+          },
+          {
+            Header: 'New',
+            accessor: 'summary.cases.new.value',
+          },
+          {
+            Header: '7-day per 100k',
+            accessor: 'casesPer100k',
+          },
+        ],
       },
     ],
     []

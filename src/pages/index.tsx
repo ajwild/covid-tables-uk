@@ -22,27 +22,37 @@ const Home = ({ data: { locations } }: PageProps<HomeQuery>): ReactElement => {
         accessor: 'position',
       },
       {
-        Header: 'Name',
-        accessor: 'areaName',
-        Cell: NameCell,
+        Header: 'Location',
+        columns: [
+          {
+            Header: 'Name',
+            accessor: 'areaName',
+            Cell: NameCell,
+          },
+          {
+            Header: 'Type',
+            accessor: ({ areaType }: { readonly areaType: string }) =>
+              formatAreaType(areaType),
+            id: 'areaType',
+          },
+        ],
       },
       {
-        Header: 'Type',
-        accessor: ({ areaType }: { readonly areaType: string }) =>
-          formatAreaType(areaType),
-        id: 'areaType',
-      },
-      {
-        Header: 'Total Cases',
-        accessor: 'summary.cases.cumulative.value',
-      },
-      {
-        Header: 'New Cases',
-        accessor: 'summary.cases.new.value',
-      },
-      {
-        Header: '7-day Cases per 100,000',
-        accessor: 'casesPer100k',
+        Header: 'Cases',
+        columns: [
+          {
+            Header: 'Total',
+            accessor: 'summary.cases.cumulative.value',
+          },
+          {
+            Header: 'New',
+            accessor: 'summary.cases.new.value',
+          },
+          {
+            Header: '7-day per 100k',
+            accessor: 'casesPer100k',
+          },
+        ],
       },
     ],
     []
