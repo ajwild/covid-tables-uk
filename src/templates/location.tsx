@@ -49,29 +49,51 @@ const Location = ({ data }: PageProps<LocationQuery>): ReactElement => {
     []
   );
 
+  type TableRow = {
+    readonly position?: number | string | null;
+    readonly casesPer100k?: number | null;
+    readonly areaName?: string | null;
+    readonly areaType?: string | null;
+    readonly population?: number | null;
+    readonly rank?: number | null;
+    readonly rankByAreaType?: number | null;
+    readonly slug?: string | null;
+    readonly summary?: Partial<Summary> | null;
+  };
+
   const tableData = useMemo(
     () =>
       [...tableLocations]
         .sort(({ node: a }, { node: b }) => Number(a.rank) - Number(b.rank))
-        .map(({ node }) => {
+        .reduce<readonly TableRow[]>((accumulator, { node }) => {
           const casesPer100k = getPreviousDaysCasesPer100kPopulation(
             node.summary as Summary,
             Number(node.population)
           );
-          return {
-            ...node,
+          const tableRow: TableRow = {
+            ...(node as TableRow),
             position: node.rankByAreaType,
             casesPer100k: casesPer100k
               ? Math.round(casesPer100k * 10 ?? 0) / 10
               : null,
           };
-        }),
+
+          const hasGap =
+            accumulator[accumulator.length - 1] &&
+            accumulator[accumulator.length - 1].rankByAreaType !==
+              (node.rankByAreaType ?? 0) - 1;
+
+          return hasGap
+            ? [...accumulator, { position: '...' }, tableRow]
+            : [...accumulator, tableRow];
+        }, []),
     [tableLocations]
   );
 
   const tableProperties = {
     columns: tableColumns,
-    data: tableData,
+    // eslint-disable-next-line functional/prefer-readonly-type
+    data: tableData as TableRow[],
   };
 
   return (
