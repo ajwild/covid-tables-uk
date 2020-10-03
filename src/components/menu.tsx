@@ -56,7 +56,7 @@ const Menu = (): ReactElement => {
           to="/"
           onClick={() => handleMenuItemClick(areaType)}
         >
-          {formatAreaType(areaType)}
+          {formatAreaType(areaType, true)}
         </Link>
       ))}
     </div>

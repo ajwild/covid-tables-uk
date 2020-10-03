@@ -82,14 +82,19 @@ export const rankLocations = (
   return areaCodeA > areaCodeB ? 1 : -1;
 };
 
-export const formatAreaType = (areaType: string | null): string => {
+export const formatAreaType = (
+  areaType: string | null,
+  adjective = false
+): string => {
   const nameMap = {
-    nation: 'Nation',
-    region: 'Region',
-    utla: 'UTLA',
-    ltla: 'LTLA',
+    nation: ['Nation', 'National'],
+    region: ['Region', 'Regional'],
+    utla: ['UTLA', 'UTLA'],
+    ltla: ['LTLA', 'LTLA'],
   };
   return areaType
-    ? nameMap[areaType as keyof typeof nameMap] || 'Unknown'
+    ? (nameMap[areaType as keyof typeof nameMap] &&
+        nameMap[areaType as keyof typeof nameMap][adjective ? 1 : 0]) ||
+        'Unknown'
     : 'All Locations';
 };

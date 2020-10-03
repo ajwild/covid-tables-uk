@@ -97,7 +97,7 @@ const Home = ({ data: { locations } }: PageProps<HomeQuery>): ReactElement => {
 
   return (
     <>
-      <PageTitle text={formatAreaType(areaTypeFilter)} />
+      <PageTitle text={formatAreaType(areaTypeFilter, true)} />
       <div className={tableColClassName}>
         <Table {...tableProperties} />
       </div>
