@@ -92,9 +92,9 @@ export const formatAreaType = (
     utla: ['UTLA', 'UTLA'],
     ltla: ['LTLA', 'LTLA'],
   };
-  return areaType
-    ? (nameMap[areaType as keyof typeof nameMap] &&
-        nameMap[areaType as keyof typeof nameMap][adjective ? 1 : 0]) ||
-        'Unknown'
-    : 'All Locations';
+  return (
+    (nameMap[areaType as keyof typeof nameMap] &&
+      nameMap[areaType as keyof typeof nameMap][adjective ? 1 : 0]) ||
+    'Unknown'
+  );
 };

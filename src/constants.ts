@@ -33,7 +33,7 @@ export const CORONAVIRUS_DATA_FIELDS = [
   // 'hospitalCases',
   // 'plannedCapacityByPublishDate',
 ];
-export const DEFAULT_AREA_TYPE = null;
+export const DEFAULT_AREA_TYPE = 'nation';
 export const LIMITER_MAX_CONCURRENT = 2;
 export const LIMITER_MIN_TIME = 200;
 export const MAX_CACHE_AGE = 1000 * 60 * 60 * 24;

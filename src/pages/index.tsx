@@ -29,12 +29,6 @@ const Home = ({ data: { locations } }: PageProps<HomeQuery>): ReactElement => {
             accessor: 'areaName',
             Cell: NameCell,
           },
-          {
-            Header: 'Type',
-            accessor: ({ areaType }: { readonly areaType: string }) =>
-              formatAreaType(areaType),
-            id: 'areaType',
-          },
         ],
       },
       {
@@ -59,10 +53,6 @@ const Home = ({ data: { locations } }: PageProps<HomeQuery>): ReactElement => {
   );
 
   const [areaTypeFilter] = useContext(AreaTypeFilterContext);
-
-  const hiddenColumns = useMemo(() => (areaTypeFilter ? ['areaType'] : []), [
-    areaTypeFilter,
-  ]);
 
   const tableData = useMemo(
     () =>
@@ -90,7 +80,6 @@ const Home = ({ data: { locations } }: PageProps<HomeQuery>): ReactElement => {
   const tableProperties = {
     columns: tableColumns,
     data: tableData,
-    hiddenColumns,
   };
 
   const tableColClassName = style({

@@ -46,7 +46,7 @@ const Menu = (): ReactElement => {
 
   return (
     <div className={menuClassName}>
-      {[null, ...AREA_TYPES].map((areaType) => (
+      {AREA_TYPES.map((areaType) => (
         <Link
           key={areaType ?? 'all'}
           className={classes(
