@@ -1,5 +1,5 @@
 import React, { ReactElement } from 'react';
-import { style } from 'typestyle';
+import { media, style } from 'typestyle';
 
 import Menu from './menu';
 
@@ -82,10 +82,14 @@ const navClassName = style({
   },
 });
 
-const navContentClassName = style({
-  display: 'flex',
-  justifyContent: 'space-between',
-});
+const navContentClassName = style(
+  {
+    display: 'flex',
+    flexDirection: 'column',
+    justifyContent: 'space-between',
+  },
+  media({ minWidth: '64em' }, { flexDirection: 'row' })
+);
 
 const titleClassName = style({
   margin: '0 0.5em',
