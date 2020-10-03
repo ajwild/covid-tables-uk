@@ -9,28 +9,39 @@ import { Summary } from '../../types';
 describe('utils/location', () => {
   describe('formatAreaType', () => {
     it('Makes the area type pretty', () => {
-      const areaType = 'nation';
-
-      const result = formatAreaType(areaType);
-
-      expect(typeof result).toStrictEqual('string');
-      expect(result).not.toStrictEqual(areaType);
+      expect(formatAreaType('nation')).toStrictEqual('Nation');
     });
 
-    it('Returns "All Locations" when null is provided', () => {
-      const areaType = null;
-
-      const result = formatAreaType(areaType);
-
-      expect(result).toMatch(/^all locations$/i);
+    it('Returns "Unknown" when falsy value is provided', () => {
+      expect(formatAreaType(null)).toMatch(/^unknown$/i);
     });
 
     it('Returns "Unknown" when a value is not found in the map', () => {
-      const areaType = 'anything';
+      expect(formatAreaType('anything')).toMatch(/^unknown$/i);
+    });
 
-      const result = formatAreaType(areaType);
+    it('Returns an adjective when the "adjective" style is requested', () => {
+      expect(formatAreaType('nation', true)).toMatch(/^national$/i);
+    });
 
-      expect(result).toMatch(/^unknown$/i);
+    it('Returns the default format when an expansion is not available', () => {
+      expect(formatAreaType('utla', true)).toMatch(/^utla$/i);
+    });
+
+    it('Returns an expansion of an acronym when the "long" style is requested', () => {
+      expect(formatAreaType('utla', false, true)).toMatch(/^upper tier local authority$/i);
+    });
+
+    it('Returns the default format when the "long" style is not available', () => {
+      expect(formatAreaType('nation', false, true)).toMatch(/^nation$/i);
+    });
+
+    it('Returns an expansion of an acronym when the "adjective" and "long" styles are requested', () => {
+      expect(formatAreaType('utla', true, true)).toMatch(/^upper tier local authority$/i);
+    });
+
+    it('Returns an adjective when the "adjective" and "long" styles are requested', () => {
+      expect(formatAreaType('nation', true, true)).toMatch(/^national$/i);
     });
   });
 

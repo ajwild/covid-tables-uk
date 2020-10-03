@@ -84,26 +84,35 @@ export const rankLocations = (
 
 export const formatAreaType = (
   areaType: string | null,
-  adjective = false
+  adjective = false,
+  long = false
 ): string => {
-  const nameMap = {
-    nation: ['Nation', 'National'],
-    region: ['Region', 'Regional'],
-    utla: ['UTLA', 'UTLA'],
-    ltla: ['LTLA', 'LTLA'],
+  const adjectiveMap = {
+    nation: 'National',
+    region: 'Regional',
   };
+  const areaTypeMap = {
+    nation: 'Nation',
+    region: 'Region',
+    utla: 'UTLA',
+    ltla: 'LTLA',
+  };
+
   return (
-    (nameMap[areaType as keyof typeof nameMap] &&
-      nameMap[areaType as keyof typeof nameMap][adjective ? 1 : 0]) ||
+    (long && getAreaTypeExpansion(areaType)) ||
+    (adjective && adjectiveMap[areaType as keyof typeof adjectiveMap]) ||
+    areaTypeMap[areaType as keyof typeof areaTypeMap] ||
     'Unknown'
   );
 };
 
-export const getAreaTypeExpansion = (areaType: string): string | undefined => {
-  const areaTypeMap = {
+export const getAreaTypeExpansion = (
+  areaType: string | null
+): string | undefined => {
+  const expansionMap = {
     utla: 'Upper Tier Local Authority',
     ltla: 'Lower Tier Local Authority',
   };
 
-  return areaTypeMap[areaType as keyof typeof areaTypeMap];
+  return expansionMap[areaType as keyof typeof expansionMap];
 };
