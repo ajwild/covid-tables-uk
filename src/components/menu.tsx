@@ -4,7 +4,7 @@ import { classes, style } from 'typestyle';
 
 import { AREA_TYPES } from '../constants';
 import AreaTypeFilterContext from '../contexts/area-type-filter';
-import { formatAreaType } from '../utils/location';
+import { formatAreaType, getAreaTypeExpansion } from '../utils/location';
 import { backgroundColor, textColorInverted } from '../utils/theme';
 
 type AreaType = string | null;
@@ -54,6 +54,7 @@ const Menu = (): ReactElement => {
             isActive(areaType) ? menuItemActiveClassName : null
           )}
           to="/"
+          title={getAreaTypeExpansion(areaType)}
           onClick={() => handleMenuItemClick(areaType)}
         >
           {formatAreaType(areaType, true)}

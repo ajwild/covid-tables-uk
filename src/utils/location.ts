@@ -98,3 +98,12 @@ export const formatAreaType = (
     'Unknown'
   );
 };
+
+export const getAreaTypeExpansion = (areaType: string): string | undefined => {
+  const areaTypeMap = {
+    utla: 'Upper Tier Local Authority',
+    ltla: 'Lower Tier Local Authority',
+  };
+
+  return areaTypeMap[areaType as keyof typeof areaTypeMap];
+};

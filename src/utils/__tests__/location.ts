@@ -1,11 +1,50 @@
 import {
+  formatAreaType,
+  getAreaTypeExpansion,
   getPreviousDaysCasesPer100kPopulation,
   rankLocations,
-  formatAreaType,
 } from '../location';
 import { Summary } from '../../types';
 
 describe('utils/location', () => {
+  describe('formatAreaType', () => {
+    it('Makes the area type pretty', () => {
+      const areaType = 'nation';
+
+      const result = formatAreaType(areaType);
+
+      expect(typeof result).toStrictEqual('string');
+      expect(result).not.toStrictEqual(areaType);
+    });
+
+    it('Returns "All Locations" when null is provided', () => {
+      const areaType = null;
+
+      const result = formatAreaType(areaType);
+
+      expect(result).toMatch(/^all locations$/i);
+    });
+
+    it('Returns "Unknown" when a value is not found in the map', () => {
+      const areaType = 'anything';
+
+      const result = formatAreaType(areaType);
+
+      expect(result).toMatch(/^unknown$/i);
+    });
+  });
+
+  describe('getAreaTypeExpansion', () => {
+    it('Returns expansion when acronym is passed', () => {
+      expect(getAreaTypeExpansion('utla')).toBe('Upper Tier Local Authority');
+      expect(getAreaTypeExpansion('ltla')).toBe('Lower Tier Local Authority');
+    });
+
+    it('Returns undefined when full string is passed', () => {
+      expect(getAreaTypeExpansion('nation')).toBeUndefined();
+    });
+  });
+
   describe('getPreviousDaysCasesPer100kPopulation', () => {
     it('Calculates value from recent cases', () => {
       const population = 200000;
@@ -98,33 +137,6 @@ describe('utils/location', () => {
     it('returns a number to sort by', () => {
       // To be implemented
       rankLocations({}, {});
-    });
-  });
-
-  describe('formatAreaType', () => {
-    it('Makes the area type pretty', () => {
-      const areaType = 'nation';
-
-      const result = formatAreaType(areaType);
-
-      expect(typeof result).toStrictEqual('string');
-      expect(result).not.toStrictEqual(areaType);
-    });
-
-    it('Returns "All Locations" when null is provided', () => {
-      const areaType = null;
-
-      const result = formatAreaType(areaType);
-
-      expect(result).toMatch(/^all locations$/i);
-    });
-
-    it('Returns "Unknown" when a value is not found in the map', () => {
-      const areaType = 'anything';
-
-      const result = formatAreaType(areaType);
-
-      expect(result).toMatch(/^unknown$/i);
     });
   });
 });
