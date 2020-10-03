@@ -1,7 +1,9 @@
-import React, { ReactElement, ReactNode } from 'react';
+import React, { ReactElement, ReactNode, useState } from 'react';
 import { style } from 'typestyle';
 
 import Header from './header';
+import { DEFAULT_AREA_TYPE } from '../constants';
+import AreaTypeFilterContext from '../contexts/area-type-filter';
 import {
   backgroundColor,
   backgroundNoise,
@@ -50,14 +52,18 @@ const Layout = ({
   children,
 }: {
   readonly children: ReactNode;
-}): ReactElement => (
-  <>
-    <div className={backdropClassName} />
-    <Header />
-    <div className="container">
-      <main className={mainClassName}>{children}</main>
-    </div>
-  </>
-);
+}): ReactElement => {
+  const areaTypeFilterState = useState(DEFAULT_AREA_TYPE);
+
+  return (
+    <AreaTypeFilterContext.Provider value={areaTypeFilterState}>
+      <div className={backdropClassName} />
+      <Header />
+      <div className="container">
+        <main className={mainClassName}>{children}</main>
+      </div>
+    </AreaTypeFilterContext.Provider>
+  );
+};
 
 export default Layout;

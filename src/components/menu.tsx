@@ -1,62 +1,66 @@
 import { Link } from 'gatsby';
-import React, { MouseEvent, ReactElement } from 'react';
-import { classes, media, style } from 'typestyle';
+import React, { ReactElement, useContext } from 'react';
+import { classes, style } from 'typestyle';
 
 import { AREA_TYPES } from '../constants';
+import AreaTypeFilterContext from '../contexts/area-type-filter';
 import { formatAreaType } from '../utils/location';
+import { backgroundColor, textColorInverted } from '../utils/theme';
 
-// eslint-disable-next-line functional/no-mixed-type
-type MenuProps = {
-  readonly areaTypeFilter: string | null;
-  readonly handleMenuItemClick: (
-    event: MouseEvent,
-    areaType: string | null
-  ) => void; // eslint-disable-line functional/no-return-void
-};
+type AreaType = string | null;
 
-const dropdownMenuClassName = style(
-  {},
-  media({ minWidth: 600 }, { display: 'none' })
-);
+const menuClassName = style({
+  margin: '1em 1em 0',
+  display: 'flex',
+  alignItems: 'center',
+});
 
-const tabMenuClassName = style(
-  { display: 'none' },
-  media({ minWidth: 600 }, { display: 'flex' })
-);
+const menuItemClassName = style({
+  marginRight: '1em',
+  color: backgroundColor.toHexString(),
+  $nest: {
+    '&:last-of-type': {
+      marginRight: 0,
+    },
+    '&:hover, &:focus': {
+      color: textColorInverted.toHexString(),
+    },
+  },
+});
 
-const Menu = ({
-  areaTypeFilter,
-  handleMenuItemClick,
-}: MenuProps): ReactElement => (
-  <>
-    <div className={dropdownMenuClassName}>
-      <div>{formatAreaType(areaTypeFilter)}</div>
-      <ul>
-        {[null, ...AREA_TYPES].map((areaType) => (
-          <Link
-            key={areaType ?? 'all'}
-            className={areaTypeFilter === areaType ? 'active' : undefined}
-            to={`/${areaType ? `?area-type=${areaType}` : ''}`}
-            onClick={(event) => handleMenuItemClick(event, areaType)}
-          >
-            {formatAreaType(areaType)}
-          </Link>
-        ))}
-      </ul>
-    </div>
-    <div className={classes('tabs', 'alt-theme', tabMenuClassName)}>
+const menuItemActiveClassName = style({
+  color: textColorInverted.toHexString(),
+  textDecoration: 'underline',
+});
+
+const Menu = (): ReactElement => {
+  const [areaTypeFilter, setAreaTypeFilter] = useContext(AreaTypeFilterContext);
+
+  const handleMenuItemClick = (areaType: AreaType): AreaType => {
+    setAreaTypeFilter(areaType);
+
+    return areaType;
+  };
+
+  const isActive = (areaType: AreaType): boolean => areaType === areaTypeFilter;
+
+  return (
+    <div className={menuClassName}>
       {[null, ...AREA_TYPES].map((areaType) => (
         <Link
           key={areaType ?? 'all'}
-          className={areaTypeFilter === areaType ? 'active' : undefined}
-          to={`/${areaType ? `?area-type=${areaType}` : ''}`}
-          onClick={(event) => handleMenuItemClick(event, areaType)}
+          className={classes(
+            menuItemClassName,
+            isActive(areaType) ? menuItemActiveClassName : null
+          )}
+          to="/"
+          onClick={() => handleMenuItemClick(areaType)}
         >
           {formatAreaType(areaType)}
         </Link>
       ))}
     </div>
-  </>
-);
+  );
+};
 
 export default Menu;

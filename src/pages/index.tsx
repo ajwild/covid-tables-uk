@@ -1,10 +1,11 @@
 import { graphql, PageProps } from 'gatsby';
-import React, { ReactElement, useMemo } from 'react';
+import React, { ReactElement, useContext, useMemo } from 'react';
 import { style } from 'typestyle';
 
 import NameCell from '../components/cells/name-cell';
 import PageTitle from '../components/page-title';
 import Table from '../components/table';
+import AreaTypeFilterContext from '../contexts/area-type-filter';
 import { Summary } from '../types';
 import { HomeQuery } from '../../generated/gatsby-graphql';
 import {
@@ -47,7 +48,8 @@ const Home = ({ data: { locations } }: PageProps<HomeQuery>): ReactElement => {
     []
   );
 
-  const areaTypeFilter = null;
+  const [areaTypeFilter] = useContext(AreaTypeFilterContext);
+
   const hiddenColumns = useMemo(() => (areaTypeFilter ? ['areaType'] : []), [
     areaTypeFilter,
   ]);

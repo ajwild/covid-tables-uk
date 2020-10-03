@@ -12,7 +12,8 @@ describe('App', () => {
   });
 
   it('Allows navigation to location page', () => {
-    cy.findByText(/^england$/i).click();
+    // Click forced because Cypress can't access link behind header
+    cy.findByText(/^england$/i).click({ force: true });
     cy.url().should('match', /\/england/i);
     cy.findByRole('main')
       .findByRole(

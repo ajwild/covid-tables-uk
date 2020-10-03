@@ -1,8 +1,8 @@
-import React, { /* MouseEvent, */ ReactElement /* useState */ } from 'react';
+import React, { ReactElement } from 'react';
 import { style } from 'typestyle';
 
-// Import Menu from './menu';
-// import { DEFAULT_AREA_TYPE } from '../constants';
+import Menu from './menu';
+
 import {
   backgroundNoise,
   highlightColor,
@@ -20,6 +20,7 @@ const navClassName = style({
   right: 0,
   zIndex: 10,
   padding: 'var(--layer1-skew-padding-top) 0 var(--layer1-skew-padding-bottom)',
+  color: textColorInverted.toHexString(),
   $nest: {
     '& > *': {
       position: 'relative',
@@ -81,36 +82,28 @@ const navClassName = style({
   },
 });
 
+const navContentClassName = style({
+  display: 'flex',
+  justifyContent: 'space-between',
+});
+
 const titleClassName = style({
-  margin: 0,
-  padding: '0 0.5em',
-  color: textColorInverted.toHexString(),
+  margin: '0 0.5em',
   fontSize: '2em',
 });
 
-const Header = (): ReactElement => {
-  // Const [areaTypeFilter, setAreaTypeFilter] = useState<string | null>(
-  //   DEFAULT_AREA_TYPE
-  // );
-  // const handleMenuItemClick = (event: MouseEvent, areaType: string | null) => {
-  //   event.preventDefault();
-  //   setAreaTypeFilter(areaType);
-  // };
-
-  return (
-    <nav className={navClassName}>
-      <div className="layer1" />
-      <div className="layer2" />
-      <div className="layer3" />
-      <div className="container">
+const Header = (): ReactElement => (
+  <nav className={navClassName}>
+    <div className="layer1" />
+    <div className="layer2" />
+    <div className="layer3" />
+    <div className="container">
+      <div className={navContentClassName}>
         <h1 className={titleClassName}>COVID-19 Tables UK</h1>
-        {/* <Menu
-          areaTypeFilter={areaTypeFilter}
-          handleMenuItemClick={handleMenuItemClick}
-        /> */}
+        <Menu />
       </div>
-    </nav>
-  );
-};
+    </div>
+  </nav>
+);
 
 export default Header;
