@@ -7,8 +7,7 @@ type NameCellProps = {
   readonly value: string;
 };
 
-const NameCell = ({ row, value }: NameCellProps): ReactElement => (
-  <Link to={row.original.slug}>{value}</Link>
-);
+const NameCell = ({ row, value }: NameCellProps): ReactElement | null =>
+  value ? <Link to={row.original.slug}>{value}</Link> : null;
 
 export default NameCell;
