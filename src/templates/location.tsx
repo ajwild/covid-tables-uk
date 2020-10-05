@@ -1,53 +1,18 @@
 import { graphql, PageProps } from 'gatsby';
 import React, { ReactElement, useMemo } from 'react';
 
-import NameCell from '../components/cells/name-cell';
 import PageTitle from '../components/page-title';
 import Table from '../components/table';
 import { LocationQuery } from '../../generated/gatsby-graphql';
 import { Summary } from '../types';
 import { getPreviousDaysCasesPer100kPopulation } from '../utils/location';
+import { defaultTableColumns } from '../utils/table';
 
 const Location = ({ data }: PageProps<LocationQuery>): ReactElement => {
   const location = data.location.edges[0].node;
   const tableLocations = data.tableLocations.edges;
 
-  const tableColumns = useMemo(
-    () => [
-      {
-        Header: 'Top',
-        accessor: 'position',
-      },
-      {
-        Header: 'Location',
-        columns: [
-          {
-            Header: 'Name',
-            accessor: 'areaName',
-            Cell: NameCell,
-          },
-        ],
-      },
-      {
-        Header: 'Cases',
-        columns: [
-          {
-            Header: 'Total',
-            accessor: 'summary.cases.cumulative.value',
-          },
-          {
-            Header: 'New',
-            accessor: 'summary.cases.new.value',
-          },
-          {
-            Header: '7-day per 100k',
-            accessor: 'casesPer100k',
-          },
-        ],
-      },
-    ],
-    []
-  );
+  const tableColumns = useMemo(() => defaultTableColumns, []);
 
   type TableRow = {
     readonly position?: number | string | null;

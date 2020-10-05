@@ -2,7 +2,6 @@ import { graphql, PageProps } from 'gatsby';
 import React, { ReactElement, useContext, useMemo } from 'react';
 import { style } from 'typestyle';
 
-import NameCell from '../components/cells/name-cell';
 import PageTitle from '../components/page-title';
 import Table from '../components/table';
 import AreaTypeFilterContext from '../contexts/area-type-filter';
@@ -12,45 +11,11 @@ import {
   formatAreaType,
   getPreviousDaysCasesPer100kPopulation,
 } from '../utils/location';
+import { defaultTableColumns } from '../utils/table';
 import { borderRadius } from '../utils/theme';
 
 const Home = ({ data: { locations } }: PageProps<HomeQuery>): ReactElement => {
-  const tableColumns = useMemo(
-    () => [
-      {
-        Header: 'Top',
-        accessor: 'position',
-      },
-      {
-        Header: 'Location',
-        columns: [
-          {
-            Header: 'Name',
-            accessor: 'areaName',
-            Cell: NameCell,
-          },
-        ],
-      },
-      {
-        Header: 'Cases',
-        columns: [
-          {
-            Header: 'Total',
-            accessor: 'summary.cases.cumulative.value',
-          },
-          {
-            Header: 'New',
-            accessor: 'summary.cases.new.value',
-          },
-          {
-            Header: '7-day per 100k',
-            accessor: 'casesPer100k',
-          },
-        ],
-      },
-    ],
-    []
-  );
+  const tableColumns = useMemo(() => defaultTableColumns, []);
 
   const [areaTypeFilter] = useContext(AreaTypeFilterContext);
 
